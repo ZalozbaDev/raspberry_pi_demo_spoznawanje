@@ -1,6 +1,6 @@
-# Spóznawanje
+# Spóznawanje rěče
 
-Priklad z Raspberry Pi 4.
+Přikład z Raspberry Pi 4.
 
 # Licenca
 
