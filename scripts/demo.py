@@ -7,8 +7,16 @@ import os
 import subprocess
 import re
 
+import apa102
+
 KEY = [6]
 LED = [26,12,16]
+
+POWER = 5
+
+PIXELS_N = 12
+
+ring = apa102.APA102(num_led=PIXELS_N)
 
 GPIO.setmode(GPIO.BCM)
 
@@ -23,10 +31,20 @@ def ledWrite(pin,value):
         else:
                 GPIO.output(pin,GPIO.LOW)
 
+def ringWrite(data):
+        for i in range(PIXELS_N):
+            ring.set_pixel(i, int(data[4*i + 1]), int(data[4*i + 2]), int(data[4*i + 3]))
+        ring.show()
+	
+
 for i in LED:
         GPIO.setup(i,GPIO.OUT)
         print("Setting up LED " + str(i) + " to OFF.")
         ledWrite(i,0)
+        
+# enable ring power
+GPIO.setup(POWER, GPIO.OUT)
+GPIO.output(POWER, GPIO.HIGH)
 
 outLED = GPIO.PWM(16,50)
 outLED.start(0)
@@ -92,12 +110,16 @@ while True:
             	for i in result:
                     print ("Result of brightness = " + i)
                     outLED.ChangeDutyCycle(int(i, base=10))
+                    ringValue = int(24 * float(int(i, base=10)) / 100.0)
+                    ringWrite([0, ringValue, 0, 0] * PIXELS_N)
             if "_LIGHTON_" in output:
                 print ("Recognized light on.")
                 outLED.ChangeDutyCycle(100)
+                ringWrite([0, 24, 0, 0] * PIXELS_N)
             if "_LIGHTOFF_" in output:
                 print ("Recognized light off.")
                 outLED.ChangeDutyCycle(0)
+                ringWrite([0, 0, 0, 0] * PIXELS_N)
             if "_BRIGHTNESS_" in output:
                 print ("Recognized brightness, will check numbers.")
                 brightness = True
