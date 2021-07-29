@@ -24,21 +24,21 @@ COPY scripts/demo.py /dLabPro/bin.debug/
 
 RUN apt install -y python3 sox alsa-utils
 
+# debian buster package is too old, use pip
 # RUN apt install -y python3-rpi.gpio
 RUN apt install -y python3-pip
 RUN pip3 install RPi.GPIO
 
-# workaround to make reconfig for bash working
-#RUN mkdir -p /usr/share/man/man1/
-
-#RUN echo "dash dash/sh boolean false" | debconf-set-selections
-#RUN DEBIAN_FRONTEND=noninteractive dpkg-reconfigure dash
-
 RUN apt install -y psmisc
 
 RUN git clone https://github.com/respeaker/seeed-voicecard.git
+# this is hard-coded for the 4-mic variant!
 RUN cp /seeed-voicecard/asound_4mic.conf /etc/asound.conf
 RUN cp /seeed-voicecard/ac108_asound.state /var/lib/alsa/asound.state
+
+COPY startme.sh /
+
+CMD ["/bin/bash", "-c", "/startme.sh"] 
 
 # run demo manually:
 ## docker run --privileged -it raspberry_pi_demo_spoznawanje /bin/bash

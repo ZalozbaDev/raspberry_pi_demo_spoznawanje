@@ -1,0 +1,6 @@
+version: '3'
+services:
+  raspberry_pi_demo_spoznawanje:
+     image: raspberry_pi_demo_spoznawanje:latest
+     restart: always
+     privileged: true
