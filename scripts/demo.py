@@ -36,7 +36,14 @@ def ringWrite(data):
             ring.set_pixel(i, int(data[4*i + 1]), int(data[4*i + 2]), int(data[4*i + 3]))
         ring.show()
 	
+def ringSetPixel(data):
+        ring.set_pixel(int(data[0]), int(data[1]), int(data[2]), int(data[3]))
+        ring.show()
 
+def ringRotate():
+        ring.rotate()
+        ring.show()
+        
 for i in LED:
         GPIO.setup(i,GPIO.OUT)
         print("Setting up LED " + str(i) + " to OFF.")
@@ -59,6 +66,7 @@ while True:
     if GPIO.input(KEY[0]) == 0:
         print("Button " + str(0) + " is pressed.")
         statusLED.ChangeDutyCycle(0)
+        ringWrite([0, 0, 0, 0] * PIXELS_N)
         process = subprocess.Popen(['arecord', '-Dac108', '-f', 'S32_LE', '-r', '16000', '-c', '4', 'hello.wav'],
                            stdout=subprocess.PIPE,
                            universal_newlines=True)
@@ -83,6 +91,7 @@ while True:
         direction_up = True
         maxDutyCycle = 50
         return_code = None
+        ringSetPixel([0, 24, 0, 0])
         while return_code == None:
             print (".", end='')
             if direction_up == True:
@@ -99,6 +108,7 @@ while True:
                     direction_up = True
             statusLED.ChangeDutyCycle(duty_cycle)
             time.sleep(0.05)
+            ringRotate()
             return_code = recog.poll()
         print("terminated")
         statusLED.ChangeDutyCycle(0)
