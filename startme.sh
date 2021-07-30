@@ -1,4 +1,4 @@
 #!/bin/bash
-cd /dLabPro/bin.debug/
+cd /dLabPro/bin.release/
 ./demo.py
 
