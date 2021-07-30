@@ -9,7 +9,13 @@ import re
 
 import apa102
 
+# keys on EXP500 are at 5 6 13 19
+# 5 and 19 are dangerous when the RESPEAKER is connected, only 6 and 13 can be used
+# reserve 13 for shutdown and use 6 for recording
 KEY = [6]
+
+# LEDs on EXP500 are at 26 12 16 20
+# 20 is occupied when RESPEAKER is connected, so do not drive directly!
 LED = [26,12,16]
 
 POWER = 5
@@ -35,7 +41,7 @@ def ringWrite(data):
         for i in range(PIXELS_N):
             ring.set_pixel(i, int(data[4*i + 1]), int(data[4*i + 2]), int(data[4*i + 3]))
         ring.show()
-	
+    
 def ringSetPixel(data):
         ring.set_pixel(int(data[0]), int(data[1]), int(data[2]), int(data[3]))
         ring.show()
@@ -91,7 +97,7 @@ while True:
         direction_up = True
         maxDutyCycle = 50
         return_code = None
-        ringSetPixel([0, 24, 0, 0])
+        ringSetPixel([0, 6, 0, 0])
         while return_code == None:
             print (".", end='')
             if direction_up == True:
@@ -113,11 +119,12 @@ while True:
         print("terminated")
         statusLED.ChangeDutyCycle(0)
         brightness = False
+        colorCheck = False
         for output in recog.stdout.readlines():
             print(output.strip())
             if brightness == True:
-            	result = re.findall(r'_(\d+)_', output)
-            	for i in result:
+                result = re.findall(r'_(\d+)_', output)
+                for i in result:
                     print ("Result of brightness = " + i)
                     outLED.ChangeDutyCycle(int(i, base=10))
                     ringValue = int(24 * float(int(i, base=10)) / 100.0)
@@ -133,3 +140,6 @@ while True:
             if "_BRIGHTNESS_" in output:
                 print ("Recognized brightness, will check numbers.")
                 brightness = True
+            if "_SETCOLOR_" in output:
+                print ("Recognized color, will check colors next.")
+                colorCheck = True
