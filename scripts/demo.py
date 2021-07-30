@@ -88,7 +88,7 @@ while True:
             return_code = process.poll()
         print("terminated")
         print("=============== Terminated ===================")
-        os.system("sox hello.wav mono.wav channels 1 norm -0.1")
+        os.system("sox hello.wav -b 16 mono.wav channels 1 norm -0.1")
         recog = subprocess.Popen(['./recognizer.sh', 'mono.wav'],
                      stdout=subprocess.PIPE,
                      universal_newlines=True)
