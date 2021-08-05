@@ -8,7 +8,7 @@ Za tutón přikład trjeba so přidatne:
 
 Prošu změniće jumpery na EXP500 kaž na tutym wobrazu:
 
-[EXP500](jumper_settings_exp500.jpg)
+![EXP500 jumper settings](jumper_settings_exp500.jpg)
 
 # Licenca
 
