@@ -10,6 +10,25 @@ Prošu změniće jumpery na EXP500 kaž na tutym wobrazu:
 
 ![EXP500 jumper settings](jumper_settings_exp500.jpg)
 
+# Software
+
+Sćěhowaca software dyrbi so instalować:
+
+* docker
+* docker-compose
+
+Container twariće na přikład tak:
+
+```console
+docker build -t raspberry_pi_demo_spoznawanje .
+```
+
+Container wuwjesće tak:
+
+```console
+docker-compose up -d
+```
+
 # Licenca
 
 Hlej dataja "LICENSE".
