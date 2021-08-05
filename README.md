@@ -1,4 +1,4 @@
-# Spóznawanje rěče
+# Spóznawanje rěče - digidom
 
 Přikład z Raspberry Pi 4.
 
