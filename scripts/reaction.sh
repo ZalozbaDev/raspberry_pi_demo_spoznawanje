@@ -16,6 +16,14 @@ else
 	_TELLTIME_*)
 		echo "Telltime reaction"
 		;;
+	_LIGHTON_*)
+		echo "Switching light on"
+		wget -O -  http://192.168.188.35/cm?cmnd=Power%20On
+		;;
+	_LIGHTOFF_*)
+		echo "Switching light off"
+		wget -O -  http://192.168.188.35/cm?cmnd=Power%20Off
+		;;
 	*)
 		echo "$1 is unknown!"
 		;;

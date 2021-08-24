@@ -90,7 +90,9 @@ RUN cd /dLabPro/bin.release/ && ./run_generation.sh
 # Add scripts for running and reactions
 ###################################
 
-COPY scripts/reaction.sh /dLabPro/bin.release/
+RUN apt install -y wget
+
+COPY scripts/reaction.sh scripts/recognizer.cfg scripts/ring_status.py /dLabPro/bin.release/
 
 COPY scripts/recognizer.cfg /dLabPro/bin.release/
 
@@ -101,4 +103,4 @@ CMD ["/bin/bash", "-c", "/startme.sh"]
 # run demo manually:
 ## docker run --privileged -it digidom_spoznawanje /bin/bash
 ## cd dLabPro/bin.release/
-## ./recognizer -cfg recognizer.cfg -out vad -d 4
+## ./recognizer -cfg recognizer.cfg -out vad -d 4 | grep -v pF
