@@ -40,31 +40,7 @@ RUN apt install -y libreadline-dev portaudio19-dev
 RUN cd dLabPro && make -C programs/dlabpro RELEASE && make -C programs/recognizer RELEASE
 
 ###################################
-# Run grammar compilation / repackaging
-###################################
-
-RUN git clone https://github.com/ZalozbaDev/UASR.git UASR
-
-RUN mkdir /dLabPro/bin.release/uasr-data
-COPY uasr-data   /dLabPro/bin.release/uasr-data
-
-# add the tool for rendering grammar and lexicon into a .svg
-RUN apt install -y graphviz
-
-# the acoustic model(s) are taken from a repo, because we are not modifying them here (just repackaging)
-RUN git clone https://github.com/ZalozbaDev/db-hsb-asr.git db-hsb-asr
-
-RUN cd db-hsb-asr && git checkout develop && cp -r model ../dLabPro/bin.release/uasr-data/db-hsb-asr-exp/common/
-
-# "feainfo.object" is expected at a certain location
-RUN cp /dLabPro/bin.release/uasr-data/db-hsb-asr-exp/common/model/adapted/feainfo.object /dLabPro/bin.release/uasr-data/db-hsb-asr-exp/common/model/
-
-COPY run_generation.sh /dLabPro/bin.release/
-
-RUN cd /dLabPro/bin.release/ && ./run_generation.sh
-
-###################################
-# Respeaker sound card
+# Prepare respeaker sound card
 ###################################
 
 # dunno if required at all if we use libportaudio to capture, but anyway...
@@ -81,13 +57,38 @@ RUN apt install -y python3-pip
 RUN pip3 install RPi.GPIO
 RUN pip3 install spidev gpiozero
 
-###################################
-# Scripts for running and reactions
-###################################
-
 RUN git clone https://github.com/ZalozbaDev/4mics_hat.git
-
 RUN cp /4mics_hat/interfaces/apa102.py /dLabPro/bin.release/
+
+###################################
+# Run grammar compilation / repackaging
+###################################
+
+RUN git clone https://github.com/ZalozbaDev/UASR.git UASR
+
+# add the tool for rendering grammar and lexicon into a .svg
+RUN apt install -y graphviz
+
+# the acoustic model(s) are taken from a repo, because we are not modifying them here (just repackaging)
+RUN git clone https://github.com/ZalozbaDev/db-hsb-asr.git db-hsb-asr
+
+RUN cd db-hsb-asr && git checkout develop 
+
+# delay copying of data to avoid re-cloning repos when rebuilding container  
+RUN mkdir /dLabPro/bin.release/uasr-data
+COPY uasr-data   /dLabPro/bin.release/uasr-data
+RUN cd db-hsb-asr && cp -r model ../dLabPro/bin.release/uasr-data/db-hsb-asr-exp/common/
+
+# "feainfo.object" is expected at a certain location
+RUN cp /dLabPro/bin.release/uasr-data/db-hsb-asr-exp/common/model/adapted/feainfo.object /dLabPro/bin.release/uasr-data/db-hsb-asr-exp/common/model/
+
+COPY run_generation.sh /dLabPro/bin.release/
+
+RUN cd /dLabPro/bin.release/ && ./run_generation.sh
+
+###################################
+# Add scripts for running and reactions
+###################################
 
 COPY scripts/reaction.sh /dLabPro/bin.release/
 
