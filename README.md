@@ -19,7 +19,15 @@ Sćěhowaca software dyrbi so instalować:
 * docker
 * docker-compose
 
-Container twariće na přikład tak:
+Tutón nawod sćahnyće tak:
+
+```console
+git clone https://github.com/ZalozbaDev/raspberry_pi_demo_spoznawanje.git
+cd raspberry_pi_demo_spoznawanje
+git checkout demo_knefl
+```
+
+Container twariće tak (přikład):
 
 ```console
 docker build -t raspberry_pi_demo_spoznawanje .
