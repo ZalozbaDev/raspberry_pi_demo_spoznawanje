@@ -1,6 +1,6 @@
 version: '3'
 services:
-  raspberry_pi_demo_spoznawanje:
-     image: raspberry_pi_demo_spoznawanje:latest
+  digidom_spoznawanje:
+     image: digidom_spoznawanje:latest
      restart: always
      privileged: true
