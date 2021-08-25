@@ -147,6 +147,12 @@ LEX: ŠĚSĆDŹESAT	SIstSdSEsat
 LEX: ŠĚSĆ	SIstS
 LEX: ŠĚSĆDŹESAĆ	SIstSdSEsatS
 
+# fake german words
+LEX: WIE vi:
+LEX: SPÄT Spe:t
+LEX: IST Ist
+LEX: ES Es
+
 # main dialog states
 DLG: (S)	__WAKEUP__ (1)
 DLG: (1)	__SLEEP__ (S)
@@ -167,6 +173,8 @@ GRM.1: (S) :_TELLTIME_ <TIME> (F)
 GRM.1: <TIME> KAK:KAK JE:JE NA:NA ČASU:ČASU
 GRM.1: <TIME> KAK:KAK NA:NA ČASU:ČASU JE:JE
 GRM.1: <TIME> KAK:KAK POZDŹE:POZDŹE JE:JE
+
+GRM.1: (S) :_SERBSCE_ WIE:WIE SPÄT:SPÄT IST:IST ES:ES
 
 GRM.1: (S) :_LIGHTOFF_ <TURNOFF> (F)
 GRM.1: (S) :_LIGHTON_ <TURNON> (F)

@@ -28,6 +28,10 @@ else
 		echo "Don't swear!"
 		mplayer -ao alsa:device=hw=1.0 $(shuf -n1 -e a_poklate.mp3 nic_zelic.mp3)
 		;;
+	_SERBSCE_*)
+		echo "Speak sorbian!"
+		mplayer -ao alsa:device=hw=1.0 $(shuf -n1 -e rec_serbsce.mp3)
+		;;
 	*)
 		echo "$1 is unknown!"
 		;;
