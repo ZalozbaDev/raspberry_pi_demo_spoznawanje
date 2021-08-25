@@ -64,6 +64,10 @@ RUN cp /4mics_hat/interfaces/apa102.py /dLabPro/bin.release/
 
 RUN apt install -y wget nodejs mplayer
 
+# RUN DEBIAN_FRONTEND="noninteractive" TZ="Europe/Berlin" apt-get install -y tzdata
+
+RUN ln -fs /usr/share/zoneinfo/Europe/Berlin /etc/localtime && dpkg-reconfigure --frontend noninteractive tzdata
+
 ###################################
 # Run grammar compilation / repackaging
 ###################################
