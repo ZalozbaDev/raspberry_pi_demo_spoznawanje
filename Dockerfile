@@ -60,6 +60,10 @@ RUN pip3 install spidev gpiozero
 RUN git clone https://github.com/ZalozbaDev/4mics_hat.git
 RUN cp /4mics_hat/interfaces/apa102.py /dLabPro/bin.release/
 
+# install all reaction packages here to avoid re-installation upon container rebuild
+
+RUN apt install -y wget nodejs mplayer
+
 ###################################
 # Run grammar compilation / repackaging
 ###################################
@@ -90,11 +94,7 @@ RUN cd /dLabPro/bin.release/ && ./run_generation.sh
 # Add scripts for running and reactions
 ###################################
 
-RUN apt install -y wget
-
-COPY scripts/reaction.sh scripts/recognizer.cfg scripts/ring_status.py /dLabPro/bin.release/
-
-COPY scripts/recognizer.cfg /dLabPro/bin.release/
+COPY scripts/* /dLabPro/bin.release/
 
 COPY startme.sh /
 
