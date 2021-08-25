@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ "$#" -ne 1 ]; then 
+if [ "$#" -lt 1 ]; then 
 	echo "Invalid nr of cmdline args!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
 else
 	echo "Reacting to $1"
@@ -14,8 +14,15 @@ else
 		python3 ./ring_status.py SLEEP
 		;;
 	__REJECTED__)
-		echo "Reject reaction"
-		mplayer -ao alsa:device=hw=1.0 $(shuf -n1 -e njejsym_rozumil.mp3 prosu_hisce_raz.mp3)
+		case $2 in 
+		0)
+			echo "Reject reaction for sleep state"
+			;;
+		*)
+			echo "Reject reaction for active states"
+			mplayer -ao alsa:device=hw=1.0 $(shuf -n1 -e njejsym_rozumil.mp3 prosu_hisce_raz.mp3)
+			;;
+	    esac
 		;;
 	_TELLTIME_*)
 		echo "Telltime reaction"
