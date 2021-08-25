@@ -24,6 +24,10 @@ else
 		echo "Switching light off"
 		wget -O -  http://192.168.188.35/cm?cmnd=Power%20Off
 		;;
+	_SWEAR_*)
+		echo "Don't swear!"
+		mplayer -ao alsa:device=hw=1.0 $(shuf -n1 -e a_poklate.mp3 nic_zelic.mp3)
+		;;
 	*)
 		echo "$1 is unknown!"
 		;;
