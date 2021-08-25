@@ -71,6 +71,17 @@ statusLED.ChangeDutyCycle(0)
 print ('Args: ', len(sys.argv))
 print ('Arg 1:', sys.argv[1])
 
-ringWrite([0, 0, 0, 0] * PIXELS_N)
+if (sys.argv[1] == "SLEEP"):
+  ringWrite([0, 0, 0, 0] * PIXELS_N)
 if (sys.argv[1] == "WAKEUP"):
   ringWrite([0, 0, 0, 24] * PIXELS_N)
+if (sys.argv[1] == "1"):
+  ringWrite([0, 0, 0, 24] * 10 + [0, 0, 0, 0] * 2)
+if (sys.argv[1] == "2"):
+  ringWrite([0, 0, 0, 24] * 8 + [0, 0, 0, 0] * 4)
+if (sys.argv[1] == "3"):
+  ringWrite([0, 0, 0, 24] * 6 + [0, 0, 0, 0] * 6)
+if (sys.argv[1] == "4"):
+  ringWrite([0, 0, 0, 24] * 4 + [0, 0, 0, 0] * 8)
+if (sys.argv[1] == "5"):
+  ringWrite([0, 0, 0, 24] * 2 + [0, 0, 0, 0] * 10)

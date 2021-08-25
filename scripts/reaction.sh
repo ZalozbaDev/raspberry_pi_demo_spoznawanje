@@ -24,8 +24,23 @@ else
 			;;
 	    esac
 		;;
+	__COUNTDOWN__)
+		case $2 in 
+		0)
+			echo "Count down starting"
+			;;
+		[1-5])
+			echo "Count down $2"
+			python3 ./ring_status.py $2
+			;;
+		*)
+			echo "Count down > 5"
+			;;
+	    esac
+		;;
 	_TELLTIME_*)
 		echo "Telltime reaction"
+		node slp.js
 		;;
 	_LIGHTON_*)
 		echo "Switching light on"
