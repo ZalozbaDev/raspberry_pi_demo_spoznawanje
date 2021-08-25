@@ -13,6 +13,10 @@ else
 		echo "Sleep reaction"
 		python3 ./ring_status.py SLEEP
 		;;
+	__REJECTED__)
+		echo "Reject reaction"
+		mplayer -ao alsa:device=hw=1.0 $(shuf -n1 -e njejsym_rozumil.mp3 prosu_hisce_raz.mp3)
+		;;
 	_TELLTIME_*)
 		echo "Telltime reaction"
 		;;
