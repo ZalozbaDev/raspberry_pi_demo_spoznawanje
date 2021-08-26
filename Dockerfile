@@ -62,7 +62,9 @@ RUN cp /4mics_hat/interfaces/apa102.py /dLabPro/bin.release/
 
 # install all reaction packages here to avoid re-installation upon container rebuild
 
-RUN apt install -y wget nodejs mplayer
+RUN apt install -y wget nodejs mplayer npm
+
+RUN npm install -g hue-cli
 
 # RUN DEBIAN_FRONTEND="noninteractive" TZ="Europe/Berlin" apt-get install -y tzdata
 

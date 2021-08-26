@@ -58,6 +58,38 @@ else
 		echo "Speak sorbian!"
 		mplayer -ao alsa:device=hw=1.0 $(shuf -n1 -e rec_serbsce.mp3)
 		;;
+	_BRIGHTNESS_*_005_*)
+		echo "Brightness command: $1"
+		hue -c /dLabPro/bin.release/.hue.json lights 1 =10 
+		;;
+	_BRIGHTNESS_*_010_*)
+		echo "Brightness command: $1"
+		hue -c /dLabPro/bin.release/.hue.json lights 1 =20 
+		;;
+	_BRIGHTNESS_*_050_*)
+		echo "Brightness command: $1"
+		hue -c /dLabPro/bin.release/.hue.json lights 1 =100 
+		;;
+	_BRIGHTNESS_*_080_*)
+		echo "Brightness command: $1"
+		hue -c /dLabPro/bin.release/.hue.json lights 1 =160 
+		;;
+	_BRIGHTNESS_*_100_*)
+		echo "Brightness command: $1"
+		hue -c /dLabPro/bin.release/.hue.json lights 1 =200 
+		;;
+	_SETCOLOR_*_RED_*)
+		echo "Setcolor command: $1"
+		hue -c /dLabPro/bin.release/.hue.json lights 1 red 
+		;;
+	_SETCOLOR_*_GREEN_*)
+		echo "Setcolor command: $1"
+		hue -c /dLabPro/bin.release/.hue.json lights 1 green
+		;;
+	_SETCOLOR_*_BLUE_*)
+		echo "Setcolor command: $1"
+		hue -c /dLabPro/bin.release/.hue.json lights 1 blue
+		;;
 	*)
 		echo "$1 is unknown!"
 		;;
