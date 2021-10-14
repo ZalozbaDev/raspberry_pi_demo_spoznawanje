@@ -9,7 +9,7 @@ LEX: CHCU	ktsu:
 LEX: CHŁÓDNO	kUvUdnO
 LEX: CYLE	tsYlE
 LEX: DAJ	daj
-LEX: DIGIDOM	dIgIdOm
+LEX: DIGIDOM	dIgIdOmO
 LEX: DOSĆ	dOstS
 LEX: DWACCI	dUvatstsi:
 LEX: DWACEĆI	dUvatse:tSi:
