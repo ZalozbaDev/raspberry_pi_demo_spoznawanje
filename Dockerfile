@@ -96,6 +96,19 @@ COPY run_generation.sh /dLabPro/bin.release/
 
 RUN cd /dLabPro/bin.release/ && ./run_generation.sh
 
+######################################
+# Respeaker USB stuff
+######################################
+
+# code to reconfigure the LEDs
+RUN apt install -y python-setuptools libusb-1.0-0 python3-libusb1
+
+RUN touch c
+
+RUN git clone https://github.com/ZalozbaDev/pixel_ring.git
+
+RUN cd pixel_ring && python3 setup.py install
+
 ###################################
 # Add scripts for running and reactions
 ###################################
@@ -108,5 +121,6 @@ CMD ["/bin/bash", "-c", "/startme.sh"]
 
 # run demo manually:
 ## docker run --privileged -it digidom_spoznawanje /bin/bash
+## python3 /pixel_ring/examples/usb_mic_array_custom.py
 ## cd dLabPro/bin.release/
 ## ./recognizer -cfg recognizer.cfg -out vad -d 4 | grep -v pF
