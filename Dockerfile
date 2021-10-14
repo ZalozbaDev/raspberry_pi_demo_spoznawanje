@@ -26,6 +26,16 @@ RUN apt install -t buster-backports -y meson libabsl-dev
 RUN cd webrtc-audio-processing && meson . build -Dprefix=$PWD/install && ninja -C build
 
 ###################################
+# Build Respeaker USB VAD dependency
+###################################
+
+RUN git clone https://github.com/ZalozbaDev/usb_4_mic_array.git usb_4_mic_array
+
+RUN apt install -y libusb-1.0-0 libusb-1.0-0-dev
+
+RUN cd usb_4_mic_array/cpp/ && chmod 755 build_static.sh && ./build_static.sh
+
+###################################
 # Build recognition software
 ###################################
 
@@ -102,8 +112,6 @@ RUN cd /dLabPro/bin.release/ && ./run_generation.sh
 
 # code to reconfigure the LEDs
 RUN apt install -y python-setuptools libusb-1.0-0 python3-libusb1
-
-RUN touch c
 
 RUN git clone https://github.com/ZalozbaDev/pixel_ring.git
 
