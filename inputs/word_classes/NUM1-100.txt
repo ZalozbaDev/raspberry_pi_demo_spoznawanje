@@ -1,0 +1,5 @@
+0 1 <eps>   <PERCENT>
+1 2 NUM1-99 <eps>
+1 2 STO     100
+2 3 <eps>   </PERCENT>
+3

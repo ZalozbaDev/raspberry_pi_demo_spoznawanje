@@ -1,0 +1,10 @@
+0 1 jedyn +1
+0 1 dwaj +2
+0 1 tři +3
+0 1 štyri +4
+0 1 pjeć +5
+0 1 šěsć +6
+0 1 sydom +7
+0 1 wosom +8
+0 1 dźewjeć +9
+1

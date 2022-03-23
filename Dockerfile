@@ -78,6 +78,39 @@ RUN npm install -g hue-cli
 
 RUN ln -fs /usr/share/zoneinfo/Europe/Berlin /etc/localtime && dpkg-reconfigure --frontend noninteractive tzdata
 
+########################################################
+# Setup locale to properly support sorbian diacritics
+########################################################
+
+RUN apt-get install -y locales
+
+RUN sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
+    locale-gen
+
+ENV LC_ALL en_US.UTF-8 
+ENV LANG en_US.UTF-8  
+ENV LANGUAGE en_US:en     
+
+#######################################################
+# Process text corpus to generate phonetical lexicon
+#######################################################
+
+RUN mkdir -p corpus/
+
+COPY inputs/corpus/smartlamp.corp           /corpus/
+COPY inputs/phoneme_rules/exceptions_v3.txt /corpus/
+COPY inputs/phoneme_rules/phonmap_v3.txt    /corpus/
+COPY tools/BASgenerator.py                  /corpus/
+COPY inputs/cfg/smartlamp.yaml              /corpus/
+
+RUN apt install -y python3 python3-numpy python3-matplotlib python3-yaml
+
+RUN cd corpus && python3 BASgenerator.py smartlamp.yaml || /bin/true
+
+# /corpus/uasr_configurations/lexicon/smartlamp_sampa.ulex
+
+RUN /bin/false
+
 ###################################
 # Run grammar compilation / repackaging
 ###################################
@@ -89,17 +122,16 @@ RUN cd UASR && git checkout 2452801de688d0843edd718e5cd1a9c41c8fc90c
 RUN apt install -y graphviz
 
 # the acoustic model(s) are taken from a repo, because we are not modifying them here (just repackaging)
-RUN git clone https://github.com/ZalozbaDev/db-hsb-asr.git db-hsb-asr
-
-RUN cd db-hsb-asr && git checkout develop 
+RUN git clone https://github.com/ZalozbaDev/speech_recognition_pretrained_models speech_recognition_pretrained_models
+RUN cd speech_recognition_pretrained_models && git checkout 7f59924e254283498c87e0f7e4638ef850b58571
 
 # delay copying of data to avoid re-cloning repos when rebuilding container  
 RUN mkdir /dLabPro/bin.release/uasr-data
 COPY uasr-data   /dLabPro/bin.release/uasr-data
-RUN cd db-hsb-asr && cp -r model ../dLabPro/bin.release/uasr-data/db-hsb-asr-exp/common/
 
-# "feainfo.object" is expected at a certain location
-RUN cp /dLabPro/bin.release/uasr-data/db-hsb-asr-exp/common/model/adapted/feainfo.object /dLabPro/bin.release/uasr-data/db-hsb-asr-exp/common/model/
+# copy pretrained acoustic model
+RUN mkdir -p /dLabPro/bin.release/uasr-data/db-hsb-asr-exp/common/model/
+RUN cd speech_recognition_pretrained_models && cp 2022_02_21/3_7.hmm 2022_02_21/feainfo.object ../dLabPro/bin.release/uasr-data/db-hsb-asr-exp/common/model/
 
 COPY run_generation.sh /dLabPro/bin.release/
 
@@ -112,7 +144,8 @@ RUN cd /dLabPro/bin.release/ && ./run_generation.sh
 # code to reconfigure the LEDs
 RUN apt install -y python-setuptools libusb-1.0-0 python3-libusb1
 
-RUN git clone https://github.com/ZalozbaDev/pixel_ring.git
+RUN git clone https://github.com/ZalozbaDev/pixel_ring.git pixel_ring
+RUN cd pixel_ring && git checkout 1a93e279f92bca31a78e52f1aa5658015643a6f7
 
 RUN cd pixel_ring && python3 setup.py install
 

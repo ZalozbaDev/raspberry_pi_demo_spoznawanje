@@ -1,0 +1,6 @@
+0 1 jedyn +1
+0 1 dwaj +2
+0 1 tři +3
+0 1 štyri +4
+0 1 NUM5-99 <eps>
+1
