@@ -1,4 +1,4 @@
-FROM debian:buster-slim
+FROM debian:bullseye-slim
 MAINTAINER Daniel Sobe <daniel.sobe@sorben.com>
 
 # docker build -t digidom_spoznawanje .
@@ -6,22 +6,16 @@ MAINTAINER Daniel Sobe <daniel.sobe@sorben.com>
 
 RUN apt update
 
+RUN apt install -y g++ make git procps nano
+
 ###################################
 # Build WebRTC dependency
 ###################################
 
-# was it really clang that was acting strange?
-
-# RUN apt install -y clang make git
-RUN apt install -y g++ make git
-
 RUN git clone https://github.com/ZalozbaDev/webrtc-audio-processing.git webrtc-audio-processing
+RUN cd webrtc-audio-processing && git checkout 6e37f37c4ea8790760b4c55d9ce9024a7e7bf260
 
-RUN echo "deb http://deb.debian.org/debian buster-backports main" >> /etc/apt/sources.list 
-
-RUN apt update
-
-RUN apt install -t buster-backports -y meson libabsl-dev
+RUN apt install -y meson libabsl-dev
 
 RUN cd webrtc-audio-processing && meson . build -Dprefix=$PWD/install && ninja -C build
 
@@ -30,6 +24,7 @@ RUN cd webrtc-audio-processing && meson . build -Dprefix=$PWD/install && ninja -
 ###################################
 
 RUN git clone https://github.com/ZalozbaDev/usb_4_mic_array.git usb_4_mic_array
+RUN cd usb_4_mic_array && git checkout ce007685d4a31ed919bafc4dfe77c28e46bcd9a8
 
 RUN apt install -y libusb-1.0-0 libusb-1.0-0-dev
 
@@ -40,8 +35,7 @@ RUN cd usb_4_mic_array/cpp/ && chmod 755 build_static.sh && ./build_static.sh
 ###################################
 
 RUN git clone https://github.com/ZalozbaDev/dLabPro.git dLabPro
-
-RUN cd dLabPro && git checkout development_vad
+RUN cd dLabPro && git checkout 32978460a7ffe1c0ab2b33f4317d0854f0e74f4a
 
 RUN apt install -y libreadline-dev portaudio19-dev
 
@@ -56,18 +50,22 @@ RUN cd dLabPro && make -C programs/dlabpro RELEASE && make -C programs/recognize
 # dunno if required at all if we use libportaudio to capture, but anyway...
 RUN apt install -y alsa-utils psmisc
 
-RUN git clone https://github.com/ZalozbaDev/seeed-voicecard.git
+RUN git clone https://github.com/ZalozbaDev/seeed-voicecard.git seeed-voicecard
+RUN cd seeed-voicecard && git checkout b595b95b2184f52e752256cca17e9b92e1a19cd7
+
 # this is hard-coded for the 4-mic variant!
 RUN cp /seeed-voicecard/asound_4mic.conf /etc/asound.conf
 RUN cp /seeed-voicecard/ac108_asound.state /var/lib/alsa/asound.state
 
 # install additional dependencies to operate the LED ring
-# maybe switch back to APT when using Debian Bullseye?
-RUN apt install -y python3-pip
-RUN pip3 install RPi.GPIO
-RUN pip3 install spidev gpiozero
+RUN apt install -y python3-gpiozero python3-rpi.gpio python3-pip
 
-RUN git clone https://github.com/ZalozbaDev/4mics_hat.git
+# spidev not yet packaged for debian bullseye
+RUN pip3 install spidev 
+
+RUN git clone https://github.com/ZalozbaDev/4mics_hat.git 4mics_hat
+RUN cd 4mics_hat && git checkout 1ab5011bef00b444b76ffe391491528b2148a50f 
+
 RUN cp /4mics_hat/interfaces/apa102.py /dLabPro/bin.release/
 
 # install all reaction packages here to avoid re-installation upon container rebuild
@@ -85,6 +83,7 @@ RUN ln -fs /usr/share/zoneinfo/Europe/Berlin /etc/localtime && dpkg-reconfigure 
 ###################################
 
 RUN git clone https://github.com/ZalozbaDev/UASR.git UASR
+RUN cd UASR && git checkout 2452801de688d0843edd718e5cd1a9c41c8fc90c
 
 # add the tool for rendering grammar and lexicon into a .svg
 RUN apt install -y graphviz
