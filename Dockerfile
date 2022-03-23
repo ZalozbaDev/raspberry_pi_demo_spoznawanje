@@ -171,8 +171,6 @@ RUN UASR_HOME=uasr /dLabPro/bin.release/dlabpro /UASR/scripts/dlabpro/tools/REC_
 # Respeaker USB stuff
 ######################################
 
-RUN /bin/false
-
 # code to reconfigure the LEDs
 RUN apt install -y python-setuptools libusb-1.0-0 python3-libusb1
 
