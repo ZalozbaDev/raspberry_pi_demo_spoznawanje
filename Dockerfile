@@ -107,13 +107,9 @@ RUN apt install -y python3 python3-numpy python3-matplotlib python3-yaml
 
 RUN cd corpus && python3 BASgenerator.py smartlamp.yaml || /bin/true
 
-# /corpus/uasr_configurations/lexicon/smartlamp_sampa.ulex
-
-RUN /bin/false
-
-###################################
-# Run grammar compilation / repackaging
-###################################
+########################################
+# Run grammar merging with word classes
+########################################
 
 RUN git clone https://github.com/ZalozbaDev/UASR.git UASR
 RUN cd UASR && git checkout 2452801de688d0843edd718e5cd1a9c41c8fc90c
@@ -125,21 +121,57 @@ RUN apt install -y graphviz
 RUN git clone https://github.com/ZalozbaDev/speech_recognition_pretrained_models speech_recognition_pretrained_models
 RUN cd speech_recognition_pretrained_models && git checkout 7f59924e254283498c87e0f7e4638ef850b58571
 
-# delay copying of data to avoid re-cloning repos when rebuilding container  
-RUN mkdir /dLabPro/bin.release/uasr-data
-COPY uasr-data   /dLabPro/bin.release/uasr-data
+RUN mkdir -p /merge
+
+# process generated lexicon (add "LEX: " prefix, remove word class placeholder)
+RUN cp /corpus/uasr_configurations/lexicon/smartlamp_sampa.ulex /merge
+RUN cat /merge/smartlamp_sampa.ulex | grep -v '{PERCENT}' | sed -e 's/^/LEX: /' > /merge/smartlamp_sampa_uasr.ulex
+
+# copy manually defined lexicon and grammar
+COPY inputs/lexicon/manual_uasr_lexicon.txt                     /merge
+COPY inputs/uasr_grammar/digidom.txt                            /merge
+
+# combine all into one file
+RUN cat /merge/smartlamp_sampa_uasr.ulex /merge/manual_uasr_lexicon.txt /merge/digidom.txt > /merge/combined_uasr_grammar.txt
+
+# copy word class files
+COPY inputs/word_classes/*         /merge/
+
+# add tooling
+COPY tools/grm2ofst.xtp merge/
+COPY tools/grmmerge.py  merge/
+
+# script will work correctly only when all grammars are in same directory
+# script expects path for the grammar (even if just "./") to work correctly
+RUN cd merge/ && DLABPRO_HOME=/dLabPro/ UASR_HOME=/UASR/ python3 grmmerge.py ./combined_uasr_grammar.txt
+
+################################################################
+# Package grammar, lexicon and acoustic model for recognition 
+################################################################
+
+# copy config file
+RUN mkdir -p /uasr-data/db-hsb-asr-exp/common/info/
+COPY inputs/cfg/package.cfg   /uasr-data/db-hsb-asr-exp/common/info/
 
 # copy pretrained acoustic model
-RUN mkdir -p /dLabPro/bin.release/uasr-data/db-hsb-asr-exp/common/model/
-RUN cd speech_recognition_pretrained_models && cp 2022_02_21/3_7.hmm 2022_02_21/feainfo.object ../dLabPro/bin.release/uasr-data/db-hsb-asr-exp/common/model/
+RUN mkdir -p /uasr-data/db-hsb-asr-exp/common/model/
+RUN cd speech_recognition_pretrained_models && cp 2022_02_21/3_7.hmm 2022_02_21/feainfo.object /uasr-data/db-hsb-asr-exp/common/model/
 
-COPY run_generation.sh /dLabPro/bin.release/
+# copy openFST langauge model
+RUN mkdir -p /uasr-data/db-hsb-asr-exp/common/grm/
+RUN cp /merge/combined_uasr_grammar.txt_ofst.txt   /uasr-data/db-hsb-asr-exp/common/grm/
+RUN cp /merge/combined_uasr_grammar.txt_lex.txt    /uasr-data/db-hsb-asr-exp/common/grm/
+# don't forget to copy the input and output symbol files!!! Packaging will not warn you if these are not found!
+RUN cp /merge/combined_uasr_grammar.txt_ofst_is.txt   /uasr-data/db-hsb-asr-exp/common/grm/
+RUN cp /merge/combined_uasr_grammar.txt_ofst_os.txt   /uasr-data/db-hsb-asr-exp/common/grm/
 
-RUN cd /dLabPro/bin.release/ && ./run_generation.sh
+RUN UASR_HOME=uasr /dLabPro/bin.release/dlabpro /UASR/scripts/dlabpro/tools/REC_PACKDATA.xtp dlg /uasr-data/db-hsb-asr-exp/common/info/package.cfg
 
 ######################################
 # Respeaker USB stuff
 ######################################
+
+RUN /bin/false
 
 # code to reconfigure the LEDs
 RUN apt install -y python-setuptools libusb-1.0-0 python3-libusb1

@@ -1,0 +1,36 @@
+#!/usr/bin/env dlabpro
+
+"$UASR_HOME/scripts/dlabpro/util/uasr.itp" include;
+"$UASR_HOME/scripts/dlabpro/util/cfg.itp" include;
+"$UASR_HOME/scripts/dlabpro/util/par.itp" include;
+"$UASR_HOME/scripts/dlabpro/util/var.itp" include;
+"$UASR_HOME/scripts/dlabpro/util/lm.itp" include;
+"$UASR_HOME/scripts/dlabpro/util/lx.itp" include;
+
+"$1" var sGrmFile;
+
+$$ 1 < if;
+  "Usage: $0 GRM.txt {EXTRA-SYMBOLS}\n" -echo;
+  quit;
+endif
+
+data idLX; sGrmFile "LEX:" idLX -LX_load;
+{ "<PAU>" } idLX -cat;
+
+#data idWC; "ls $(dirname $[sGrmFile] )/*.txt | sed -e s%.*/%% | cut -f1 -d." "ascii" idWC stdfile /execute -import;
+#idWC idLX -cat;
+
+idLX.nrec var off;
+$$ 1 - idLX.nrec + idLX -reallocate;
+2 var a; a $$ <= while;
+  a -argv :a-2+off: 0 idLX -sstore;
+a ++=; end;
+
+data idGrm; sGrmFile "GRM:" idGrm -FSG_load;
+fst itGrm; idGrm idLX NULL itGrm -FSG_compile;
+
+"~STK" itGrm.td -find_comp 0 < if; "~STK" 2004 itGrm.td -addcomp; end;
+
+"$[sGrmFile]_ofst.txt" "fsm-t" itGrm stdfile -export;
+
+quit;

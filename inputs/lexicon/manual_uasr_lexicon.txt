@@ -1,0 +1,6 @@
+
+# fake german words
+LEX: WIE (.|#|)wi(.|#|)
+LEX: SPÄT (.|#|)SpEt(.|#|)
+LEX: IST (.|#|)ist(.|#|)
+LEX: ES (.|#|)QEs(.|#|)
