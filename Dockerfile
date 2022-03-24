@@ -97,11 +97,17 @@ ENV LANGUAGE en_US:en
 
 RUN mkdir -p corpus/
 
-COPY inputs/corpus/smartlamp.corp           /corpus/
+COPY inputs/corpus/smartlamp_base.corp      /corpus/
 COPY inputs/phoneme_rules/exceptions_v3.txt /corpus/
 COPY inputs/phoneme_rules/phonmap_v3.txt    /corpus/
 COPY tools/BASgenerator.py                  /corpus/
 COPY inputs/cfg/smartlamp.yaml              /corpus/
+
+### 
+# as long as word classes are not supported, use the reduced grammar
+###
+COPY inputs/corpus/no_word_classes_corpus.corp /corpus/
+RUN cat /corpus/smartlamp_base.corp /corpus/no_word_classes_corpus.corp > /corpus/smartlamp.corp
 
 RUN apt install -y python3 python3-numpy python3-matplotlib python3-yaml
 
@@ -134,16 +140,20 @@ COPY inputs/uasr_grammar/digidom.txt                            /merge
 # combine all into one file
 RUN cat /merge/smartlamp_sampa_uasr.ulex /merge/manual_uasr_lexicon.txt /merge/digidom.txt > /merge/combined_uasr_grammar.txt
 
-# copy word class files
-COPY inputs/word_classes/*         /merge/
+#################
+# disabled as long as word classes are not supported with dialogue grammars
+#################
 
-# add tooling
-COPY tools/grm2ofst.xtp merge/
-COPY tools/grmmerge.py  merge/
+#  copy word class files
+#COPY inputs/word_classes/*         /merge/
 
-# script will work correctly only when all grammars are in same directory
-# script expects path for the grammar (even if just "./") to work correctly
-RUN cd merge/ && DLABPRO_HOME=/dLabPro/ UASR_HOME=/UASR/ python3 grmmerge.py ./combined_uasr_grammar.txt
+#  add tooling
+#COPY tools/grm2ofst.xtp merge/
+#COPY tools/grmmerge.py  merge/
+
+#  script will work correctly only when all grammars are in same directory
+#  script expects path for the grammar (even if just "./") to work correctly
+#RUN cd merge/ && DLABPRO_HOME=/dLabPro/ UASR_HOME=/UASR/ python3 grmmerge.py ./combined_uasr_grammar.txt
 
 ################################################################
 # Package grammar, lexicon and acoustic model for recognition 
@@ -157,13 +167,19 @@ COPY inputs/cfg/package.cfg   /uasr-data/db-hsb-asr-exp/common/info/
 RUN mkdir -p /uasr-data/db-hsb-asr-exp/common/model/
 RUN cd speech_recognition_pretrained_models && cp 2022_02_21/3_7.hmm 2022_02_21/feainfo.object /uasr-data/db-hsb-asr-exp/common/model/
 
+#################
+# disabled as long as word classes are not supported with dialogue grammars
+#################
+
 # copy openFST langauge model
 RUN mkdir -p /uasr-data/db-hsb-asr-exp/common/grm/
-RUN cp /merge/combined_uasr_grammar.txt_ofst.txt   /uasr-data/db-hsb-asr-exp/common/grm/
-RUN cp /merge/combined_uasr_grammar.txt_lex.txt    /uasr-data/db-hsb-asr-exp/common/grm/
+#RUN cp /merge/combined_uasr_grammar.txt_ofst.txt   /uasr-data/db-hsb-asr-exp/common/grm/
+#RUN cp /merge/combined_uasr_grammar.txt_lex.txt    /uasr-data/db-hsb-asr-exp/common/grm/
 # don't forget to copy the input and output symbol files!!! Packaging will not warn you if these are not found!
-RUN cp /merge/combined_uasr_grammar.txt_ofst_is.txt   /uasr-data/db-hsb-asr-exp/common/grm/
-RUN cp /merge/combined_uasr_grammar.txt_ofst_os.txt   /uasr-data/db-hsb-asr-exp/common/grm/
+#RUN cp /merge/combined_uasr_grammar.txt_ofst_is.txt   /uasr-data/db-hsb-asr-exp/common/grm/
+#RUN cp /merge/combined_uasr_grammar.txt_ofst_os.txt   /uasr-data/db-hsb-asr-exp/common/grm/
+
+RUN cp /merge/combined_uasr_grammar.txt /uasr-data/db-hsb-asr-exp/common/grm/
 
 RUN UASR_HOME=uasr /dLabPro/bin.release/dlabpro /UASR/scripts/dlabpro/tools/REC_PACKDATA.xtp dlg /uasr-data/db-hsb-asr-exp/common/info/package.cfg
 
