@@ -2,6 +2,7 @@
 
 # reverse order of ALSA and PulseAudio .jar files for use of different mixer subsystem 
 
+LD_LIBRARY_PATH=. \
 java -cp istack-commons-runtime.jar:javax.activation-api.jar:jaxb-api.jar:\
 jaxb-core.jar:jaxb-runtime.jar:stax-ex.jar:ips.commons.jar:\
 ips.audiotools.jar:ips.speechdb.jar:ips.speechdbtools.jar:\

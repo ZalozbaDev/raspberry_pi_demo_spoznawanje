@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<ProjectConfiguration version="4.0.0">
+  <name>HSB-1</name>
+  <RecordingConfiguration>
+    <url>RECS/</url>
+    <captureScope>SESSION</captureScope>
+  </RecordingConfiguration>
+  <PromptConfiguration>
+    <promptsUrl>HSB-1_script.xml</promptsUrl>
+    <InstructionsFont>
+      <family>SansSerif</family>
+    </InstructionsFont>
+    <PromptFont>
+      <family>SansSerif</family>
+    </PromptFont>
+    <DescriptionFont>
+      <family>SansSerif</family>
+    </DescriptionFont>
+    <automaticPromptPlay>false</automaticPromptPlay>
+    <PromptBeep>
+      <beepGainRatio>1.0</beepGainRatio>
+    </PromptBeep>
+  </PromptConfiguration>
+  <Speakers>
+    <speakersUrl>HSB-1_speakers.xml</speakersUrl>
+  </Speakers>
+</ProjectConfiguration>
