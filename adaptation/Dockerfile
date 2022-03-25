@@ -102,6 +102,8 @@ COPY inputs/trl/ADP                   uasr-data/db-hsb-asr/common/trl/ADP/
 # now actually run the adaptation
 RUN UASR_HOME="uasr" /dLabPro/bin.release/dlabpro UASR/scripts/dlabpro/HMM.xtp adp uasr-data/db-hsb-asr/HSB-01/info/adapt.cfg
 
+RUN mkdir -p /output
+
 # just a default instruction, might be handy
 CMD ["/bin/bash"]
 
@@ -109,5 +111,4 @@ CMD ["/bin/bash"]
 # how to fetch the trained models from the container
 #########################################################
 
-## mkdir -p output && rm -rf ./output/* 
-## docker run --mount type=bind,source="$(pwd)"/output,target=/output/ -it speech_recognition_acoustic_model_training_step4 cp -r /uasr-data/db-hsb-asr/HSB-01/model/ /output/
+## docker run --mount type=bind,source="$(pwd)"/output,target=/output/ -it digidom_spoznawanje_adapcija cp -r /uasr-data/db-hsb-asr/HSB-01/model/ /output/
