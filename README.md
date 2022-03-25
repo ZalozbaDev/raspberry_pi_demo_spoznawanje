@@ -50,7 +50,7 @@ Za wopisanje hromadźenja trěbnych nahrawanjow a přewjedźenje adapcije prošu
 
 Ručež předleži adaptowany model, móže so do containera zatwarić.
 
-Container wužiwajo adaptowany model twariće tak (hlej tež započatk "Dockerfile"):
+Container wužiwajo adaptowany model twariće tak (hlej tež započatk dataje "Dockerfile"):
 
 ```console
 docker build --build-arg USE_ADAPTED_MODELS=true -t digidom_spoznawanje .
@@ -60,7 +60,7 @@ Po tym so container móže na samsne wašnje wužiwać.
 
 # Přiměrjenje
 
-Za přiměrjenje abo zatwar nowych funkcijach su změny we tutych datajach trěbne: 
+Za přiměrjenje funkcijow, abo zatwar nowych funkcijach su změny we tutych datajach trěbne: 
 
 * "inputs/corpus/smartlamp_base.corp"
     * słowa kóždeje sady so awtomatisce zapisaja do fonetiskeho leksikona
@@ -69,6 +69,8 @@ Za přiměrjenje abo zatwar nowych funkcijach su změny we tutych datajach trěb
 * "scripts/reaction.sh"
     * tu so napisa, kak ma prototyp reagować, jeli je komando spóznał
 
+Po tym container prošu znowa twarić.
+    
 # Licenca
 
 Hlej dataja "LICENSE".
