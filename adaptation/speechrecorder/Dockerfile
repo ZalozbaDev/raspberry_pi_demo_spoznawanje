@@ -67,6 +67,5 @@ RUN mkdir -p /root/speechrecorder/HSB-1/RECS
 CMD ["/bin/bash"]
 
 # how to run speechrecorder inside the docker container
-## mkdir -p RECS
 ## xauth list
 ## docker run --privileged -it --net=host -e DISPLAY -v /tmp/.X11-unix --mount type=bind,source="$(pwd)"/RECS,target=/root/speechrecorder/HSB-1/RECS --env HOST_MAGIC_COOKIE="!!!!!!PUT_CORRECT_COOKIE_HERE!!!!!!" bas_speechrecorder_pi /startme.sh
