@@ -84,18 +84,19 @@ RUN mkdir -p uasr-data/db-hsb-asr/HSB-01/flists uasr-data/db-hsb-asr/HSB-01/log 
 
 COPY uasr-data/db-hsb-asr/HSB-01/info/*                          uasr-data/db-hsb-asr/HSB-01/info/
 
-COPY /corpus/uasr_configurations/info/classes.txt                uasr-data/db-hsb-asr/HSB-01/info/
-COPY /corpus/uasr_configurations/lexicon/adaptation_sampa.ulex   uasr-data/db-hsb-asr/HSB-01/lexicon/
+# these were generated just before
+RUN cp /corpus/uasr_configurations/info/classes.txt              uasr-data/db-hsb-asr/HSB-01/info/
+RUN cp /corpus/uasr_configurations/lexicon/adaptation_sampa.ulex uasr-data/db-hsb-asr/HSB-01/lexicon/
 
 COPY inputs/flists/*                                             uasr-data/db-hsb-asr/HSB-01/flists/
 
 # copy pretrained acoustic model
-RUN cd speech_recognition_pretrained_models && cp 2022_02_21/3_7.hmm 2022_02_21/feainfo.object uasr-data/db-hsb-asr/HSB-01/model/
+RUN cd speech_recognition_pretrained_models && cp 2022_02_21/3_7.hmm 2022_02_21/feainfo.object /uasr-data/db-hsb-asr/HSB-01/model/
 
 # copy the adaptation recordings and transliterations
-RUN mkdir -p uasr-data/db-hsb-asr/common/sig/ADP/ uasr-data/db-hsb-asr/common/trl/ADP/  
+RUN mkdir -p uasr-data/db-hsb-asr/common/sig/ADP/RECS/ uasr-data/db-hsb-asr/common/trl/ADP/  
 
-COPY adaptation/speechrecorder/RECS/  uasr-data/db-hsb-asr/common/sig/ADP/
+COPY speechrecorder/RECS/             uasr-data/db-hsb-asr/common/sig/ADP/RECS/
 COPY inputs/trl/ADP                   uasr-data/db-hsb-asr/common/trl/ADP/
 
 # now actually run the adaptation
