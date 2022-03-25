@@ -44,11 +44,11 @@ else
 		;;
 	_LIGHTON_*)
 		echo "Switching light on"
-		wget -O -  http://192.168.188.35/cm?cmnd=Power%20On
+		wget --timeout=5 --tries=1 -O -  http://192.168.178.44/cm?cmnd=Power%20On
 		;;
 	_LIGHTOFF_*)
 		echo "Switching light off"
-		wget -O -  http://192.168.188.35/cm?cmnd=Power%20Off
+		wget --timeout=5 --tries=1 -O -  http://192.168.178.44/cm?cmnd=Power%20Off
 		;;
 	_SWEAR_*)
 		echo "Don't swear!"

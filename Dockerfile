@@ -1,7 +1,13 @@
 FROM debian:bullseye-slim
 MAINTAINER Daniel Sobe <daniel.sobe@sorben.com>
 
+# normal call using builtin acoustic models
 # docker build -t digidom_spoznawanje .
+
+# normal call but specify adapted acoustic models
+# docker build --build-arg USE_ADAPTED_MODELS=true -t digidom_spoznawanje .
+
+# rebuild from scratch
 # docker build -t digidom_spoznawanje . --no-cache
 
 RUN apt update
@@ -164,8 +170,23 @@ RUN mkdir -p /uasr-data/db-hsb-asr-exp/common/info/
 COPY inputs/cfg/package.cfg   /uasr-data/db-hsb-asr-exp/common/info/
 
 # copy pretrained acoustic model
+RUN mkdir -p /no_adaptation/
+RUN cd speech_recognition_pretrained_models && cp 2022_02_21/3_7.hmm 2022_02_21/feainfo.object /no_adaptation/
+
+# copy directory which might contain adapted models
+RUN mkdir /adaptation/
+COPY adaptation/output/ /adaptation/
+
+# select which model to use
 RUN mkdir -p /uasr-data/db-hsb-asr-exp/common/model/
-RUN cd speech_recognition_pretrained_models && cp 2022_02_21/3_7.hmm 2022_02_21/feainfo.object /uasr-data/db-hsb-asr-exp/common/model/
+
+ARG USE_ADAPTED_MODELS=false
+
+RUN if [ "$USE_ADAPTED_MODELS"  = "true" ] ; then echo "Adapted model!" ; cp /adaptation/model/3_7_A.hmm  /uasr-data/db-hsb-asr-exp/common/model/3_7.hmm ; fi
+RUN if [ "$USE_ADAPTED_MODELS" != "true" ] ; then echo "Basic model!"   ; cp /no_adaptation/3_7.hmm       /uasr-data/db-hsb-asr-exp/common/model/3_7.hmm ; fi
+
+RUN if [ "$USE_ADAPTED_MODELS"  = "true" ] ; then echo "Adapted model!" ; cp /adaptation/model/feainfo.object /uasr-data/db-hsb-asr-exp/common/model/ ; fi
+RUN if [ "$USE_ADAPTED_MODELS" != "true" ] ; then echo "Basic model!"   ; cp /no_adaptation/feainfo.object    /uasr-data/db-hsb-asr-exp/common/model/ ; fi
 
 #################
 # disabled as long as word classes are not supported with dialogue grammars
@@ -204,6 +225,11 @@ COPY scripts/* /dLabPro/bin.release/
 COPY startme.sh /
 
 CMD ["/bin/bash", "-c", "/startme.sh"] 
+
+# fetch SVGs of resulting grammar and all other data for recognition
+## mkdir -p output 
+## docker run --mount type=bind,source="$(pwd)"/output,target=/output/ -it digidom_spoznawanje cp -r /recognizer /output/ 
+
 
 # run demo manually:
 ## docker run --privileged -it digidom_spoznawanje /bin/bash
