@@ -1,0 +1,9 @@
+0 1 <eps> -(
+1 2 jedyn +1
+1 2 dwaj +2
+1 2 tři +3
+1 2 štyri +4
+1 2 pjeć +5
+1 2 krótko +2
+2 3 do )
+3

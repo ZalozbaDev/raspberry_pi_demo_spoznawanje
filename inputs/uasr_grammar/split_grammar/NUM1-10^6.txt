@@ -1,0 +1,16 @@
+0 7 <eps> +(
+7 1 NUM(1-9)00 <eps>
+1 2 a <eps>
+2 3 <eps> +0
+2 3 NUM1-99 <eps>
+7 3 dwaj +2
+7 3 tři +3
+7 3 štyri +4
+7 3 NUM5-99 <eps>
+3 4 tysac )*1000
+4 5 <eps> <eps>
+4 6 <eps> +0
+0 5 <eps> +0
+4 6 <eps> +0
+5 6 NUM1-999 <eps>
+6

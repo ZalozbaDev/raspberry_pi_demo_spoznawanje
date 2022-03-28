@@ -1,0 +1,7 @@
+0 1 třicty +30
+0 1 třicety +30
+0 1 jedynatřicty +31
+0 1 jedynatřicety +31
+0 1 jenatřicty +31
+0 1 jenatřicety +31
+1

@@ -1,0 +1,8 @@
+0 1 póndźelu +1
+0 1 wutoru +2
+0 1 srjedu +3
+0 1 štwórtk +4
+0 1 pjatk +5
+0 1 sobotu +6
+0 1 njedźelu +7
+1

@@ -1,0 +1,8 @@
+LEX: DIGIDOM	(.|#|)digidOm(.|#|)
+
+# Main entry
+GRM: (S) <PAU> (S)
+GRM: (F) <PAU> (F)
+
+GRM.S:  S	DIGIDOM:__WAKEUP__
+
