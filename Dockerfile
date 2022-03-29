@@ -98,8 +98,25 @@ ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en     
 
 #######################################################
-# Process text corpus to generate phonetical lexicon
+# Process text corpora to generate phonetical lexicon
 #######################################################
+
+RUN apt install -y python3 python3-numpy python3-matplotlib python3-yaml
+
+# process the wakeup corpus
+# yes this is completely overkill for just one wakeup word
+
+RUN mkdir -p wakeup/
+
+COPY inputs/corpus/wakeup.corp              /wakeup/
+COPY inputs/phoneme_rules/exceptions_v3.txt /wakeup/
+COPY inputs/phoneme_rules/phonmap_v3.txt    /wakeup/
+COPY tools/BASgenerator.py                  /wakeup/
+COPY inputs/cfg/wakeup.yaml                 /wakeup/
+
+RUN cd wakeup && python3 BASgenerator.py wakeup.yaml || /bin/true
+
+# process the active corpus
 
 RUN mkdir -p corpus/
 
@@ -110,18 +127,16 @@ COPY tools/BASgenerator.py                  /corpus/
 COPY inputs/cfg/smartlamp.yaml              /corpus/
 
 ### 
-# as long as word classes are not supported, use the reduced grammar
+# combine base corpus with word classes corpus
 ###
-COPY inputs/corpus/no_word_classes_corpus.corp /corpus/
-RUN cat /corpus/smartlamp_base.corp /corpus/no_word_classes_corpus.corp > /corpus/smartlamp.corp
-
-RUN apt install -y python3 python3-numpy python3-matplotlib python3-yaml
+COPY inputs/corpus/word_class_corpus.corp /corpus/
+RUN cat /corpus/smartlamp_base.corp /corpus/word_class_corpus.corp > /corpus/smartlamp.corp
 
 RUN cd corpus && python3 BASgenerator.py smartlamp.yaml || /bin/true
 
-########################################
-# Run grammar merging with word classes
-########################################
+##################################################
+# Run merging of active grammar with word classes
+##################################################
 
 RUN git clone https://github.com/ZalozbaDev/UASR.git UASR
 RUN cd UASR && git checkout 2452801de688d0843edd718e5cd1a9c41c8fc90c
@@ -146,24 +161,22 @@ COPY inputs/uasr_grammar/digidom.txt                            /merge
 # combine all into one file
 RUN cat /merge/smartlamp_sampa_uasr.ulex /merge/manual_uasr_lexicon.txt /merge/digidom.txt > /merge/combined_uasr_grammar.txt
 
-#################
-# disabled as long as word classes are not supported with dialogue grammars
-#################
-
 #  copy word class files
-#COPY inputs/word_classes/*         /merge/
+COPY inputs/word_classes/*         /merge/
 
 #  add tooling
-#COPY tools/grm2ofst.xtp merge/
-#COPY tools/grmmerge.py  merge/
+COPY tools/grm2ofst.xtp merge/
+COPY tools/grmmerge.py  merge/
 
 #  script will work correctly only when all grammars are in same directory
 #  script expects path for the grammar (even if just "./") to work correctly
-#RUN cd merge/ && DLABPRO_HOME=/dLabPro/ UASR_HOME=/UASR/ python3 grmmerge.py ./combined_uasr_grammar.txt
+RUN cd merge/ && DLABPRO_HOME=/dLabPro/ UASR_HOME=/UASR/ python3 grmmerge.py ./combined_uasr_grammar.txt
 
 ################################################################
 # Package grammar, lexicon and acoustic model for recognition 
 ################################################################
+
+RUN /bin/false
 
 # copy config file
 RUN mkdir -p /uasr-data/db-hsb-asr-exp/common/info/
