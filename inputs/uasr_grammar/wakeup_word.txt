@@ -1,0 +1,12 @@
+
+# main dialog states
+DLG: (S)	__WAKEUP__ (1)
+DLG: (1)	__SLEEP__ (S)
+
+# grammar rules sleeping
+GRM.S: (S)	<PAU> (S)
+GRM.S: (F)	<PAU> (F)
+GRM.S:  S	DIGIDOM:__WAKEUP__
+
+# grammar rules ACTIVE (Dummy grammar, will be replaced by active grammar [merge of digidom.txt with word classes])
+GRM.1: (S) <PAU>: (F)
