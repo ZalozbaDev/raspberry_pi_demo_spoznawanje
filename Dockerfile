@@ -220,49 +220,36 @@ RUN cat wakeup/wakeup_lexicon.txt wakeup/wakeup_word.txt > /uasr-data/db-hsb-asr
 
 RUN UASR_HOME=uasr /dLabPro/bin.release/dlabpro /UASR/scripts/dlabpro/tools/REC_PACKDATA.xtp dlg /uasr-data/db-hsb-asr-exp/common/info/wakeup_word.cfg
 
-################################################################
-# Package grammar, lexicon and acoustic model for recognition 
-################################################################
+###################################################################
+# Package merged active grammar with word classes for recognition 
+###################################################################
 
-RUN /bin/false
+# active grammar specific config
+COPY inputs/cfg/digidom.cfg   /uasr-data/db-hsb-asr-exp/common/info/
 
-# copy config files
-RUN mkdir -p /uasr-data/db-hsb-asr-exp/common/info/
-COPY inputs/cfg/package.cfg   /uasr-data/db-hsb-asr-exp/common/info/
-
-# copy pretrained acoustic model
-RUN mkdir -p /no_adaptation/
-RUN cd speech_recognition_pretrained_models && cp 2022_02_21/3_7.hmm 2022_02_21/feainfo.object /no_adaptation/
-
-# copy directory which might contain adapted models
-RUN mkdir /adaptation/
-COPY adaptation/output/ /adaptation/
-
-# select which model to use
-RUN mkdir -p /uasr-data/db-hsb-asr-exp/common/model/
-
-ARG USE_ADAPTED_MODELS=false
-
-RUN if [ "$USE_ADAPTED_MODELS"  = "true" ] ; then echo "Adapted model!" ; cp /adaptation/model/3_7_A.hmm  /uasr-data/db-hsb-asr-exp/common/model/3_7.hmm ; fi
-RUN if [ "$USE_ADAPTED_MODELS" != "true" ] ; then echo "Basic model!"   ; cp /no_adaptation/3_7.hmm       /uasr-data/db-hsb-asr-exp/common/model/3_7.hmm ; fi
-
-RUN if [ "$USE_ADAPTED_MODELS"  = "true" ] ; then echo "Adapted model!" ; cp /adaptation/model/feainfo.object /uasr-data/db-hsb-asr-exp/common/model/ ; fi
-RUN if [ "$USE_ADAPTED_MODELS" != "true" ] ; then echo "Basic model!"   ; cp /no_adaptation/feainfo.object    /uasr-data/db-hsb-asr-exp/common/model/ ; fi
-
-#################
-# disabled as long as word classes are not supported with dialogue grammars
-#################
-
-# copy openFST langauge model
-#RUN cp /merge/combined_uasr_grammar.txt_ofst.txt   /uasr-data/db-hsb-asr-exp/common/grm/
-#RUN cp /merge/combined_uasr_grammar.txt_lex.txt    /uasr-data/db-hsb-asr-exp/common/grm/
+# copy openFST language model
+RUN cp /merge/combined_uasr_grammar.txt_ofst.txt   /uasr-data/db-hsb-asr-exp/common/grm/
+RUN cp /merge/combined_uasr_grammar.txt_lex.txt    /uasr-data/db-hsb-asr-exp/common/grm/
 # don't forget to copy the input and output symbol files!!! Packaging will not warn you if these are not found!
-#RUN cp /merge/combined_uasr_grammar.txt_ofst_is.txt   /uasr-data/db-hsb-asr-exp/common/grm/
-#RUN cp /merge/combined_uasr_grammar.txt_ofst_os.txt   /uasr-data/db-hsb-asr-exp/common/grm/
+RUN cp /merge/combined_uasr_grammar.txt_ofst_is.txt   /uasr-data/db-hsb-asr-exp/common/grm/
+RUN cp /merge/combined_uasr_grammar.txt_ofst_os.txt   /uasr-data/db-hsb-asr-exp/common/grm/
 
-RUN cp /merge/combined_uasr_grammar.txt /uasr-data/db-hsb-asr-exp/common/grm/
+RUN UASR_HOME=uasr /dLabPro/bin.release/dlabpro /UASR/scripts/dlabpro/tools/REC_PACKDATA.xtp rec /uasr-data/db-hsb-asr-exp/common/info/digidom.cfg
 
-RUN UASR_HOME=uasr /dLabPro/bin.release/dlabpro /UASR/scripts/dlabpro/tools/REC_PACKDATA.xtp dlg /uasr-data/db-hsb-asr-exp/common/info/package.cfg
+##############################################
+# Combine the two packaged grammars into one
+##############################################
+
+RUN mkdir /recognizer
+
+# copy all output files for wakeup word dialogue grammar
+RUN cp /grm_wakeup_word/* /recognizer
+
+# add script for merging of packaged grammars
+COPY tools/replace_rn.xtp /recognizer
+
+# merge the active grammar (second argument) into the dialogue grammar (first argument)
+RUN cd recognizer && /dLabPro/bin.release/dlabpro replace_rn.xtp sesinfo.object ../grm_active/sesinfo.object
 
 ######################################
 # Respeaker USB stuff
