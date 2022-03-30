@@ -7,3 +7,6 @@ services:
      environment:
        PORTAUDIO_SOUND_CARD_NAME: "ac108"
        VOICE_ACTIVITY_DETECTION_ALGO: "rtc"
+       REJECTION_TAD: "0.1"
+       REJECTION_TED: "0.8"
+       
