@@ -1,0 +1,13 @@
+0 2 NUM1-9 <eps>
+0 2 dźesać +10
+0 1 jěd +1
+0 1 dwa +2
+0 1 tři +3
+0 1 štyr +4
+0 1 pjat +5
+0 1 šěs +6
+0 1 sydom +7
+0 1 wosom +8
+0 1 dźewjat +9
+1 2 naće +10
+2

@@ -77,17 +77,20 @@ else
 		# multiply by 2 and specify after "="
 		# hue -c /dLabPro/bin.release/.hue.json lights 1 =10 
 		;;
+	_WAKEMEUP_*)
+		echo "Wakemeup command: $1"
+		;;
 	_SETCOLOR_*_RED_*)
 		echo "Setcolor command: $1"
-		hue -c /dLabPro/bin.release/.hue.json lights 1 red 
+		# hue -c /dLabPro/bin.release/.hue.json lights 1 red 
 		;;
 	_SETCOLOR_*_GREEN_*)
 		echo "Setcolor command: $1"
-		hue -c /dLabPro/bin.release/.hue.json lights 1 green
+		# hue -c /dLabPro/bin.release/.hue.json lights 1 green
 		;;
 	_SETCOLOR_*_BLUE_*)
 		echo "Setcolor command: $1"
-		hue -c /dLabPro/bin.release/.hue.json lights 1 blue
+		# hue -c /dLabPro/bin.release/.hue.json lights 1 blue
 		;;
 	*)
 		echo "$1 is unknown!"

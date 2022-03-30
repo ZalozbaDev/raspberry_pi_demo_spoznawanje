@@ -1,0 +1,13 @@
+0 1 třicteho +30
+0 1 třiceteho +30
+0 1 jedynatřicteho +31
+0 1 jedynatřiceteho +31
+0 1 jenatřicteho +31
+0 1 jenatřiceteho +31
+0 1 třicto +30
+0 1 třiceto +30
+0 1 jedynatřicto +31
+0 1 jedynatřiceto +31
+0 1 jenatřicto +31
+0 1 jenatřiceto +31
+1

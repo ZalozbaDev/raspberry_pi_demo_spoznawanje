@@ -162,7 +162,8 @@ COPY inputs/uasr_grammar/digidom.txt                            /merge
 RUN cat /merge/smartlamp_sampa_uasr.ulex /merge/manual_uasr_lexicon.txt /merge/digidom.txt > /merge/combined_uasr_grammar.txt
 
 #  copy word class files
-COPY inputs/word_classes/*         /merge/
+COPY inputs/word_classes/dates/*         /merge/
+COPY inputs/word_classes/numbers_times/* /merge/
 
 #  add tooling
 COPY tools/grm2ofst.xtp merge/

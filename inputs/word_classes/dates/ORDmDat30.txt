@@ -1,0 +1,5 @@
+0 1 třicto +30
+0 1 třiceto +30
+0 1 třicteho +30
+0 1 třiceteho +30
+1

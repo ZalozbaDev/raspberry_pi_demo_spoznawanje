@@ -1,0 +1,9 @@
+0 3 nul +0
+0 3 NUM1-19 <eps>
+0 1 jedyn +1
+0 1 dwaj +2
+0 1 tři +3
+0 2 <eps> +0
+1 2 a <eps>
+2 3 dwaceći +20
+3
