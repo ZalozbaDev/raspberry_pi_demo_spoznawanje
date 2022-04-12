@@ -1,0 +1,12 @@
+
+USB audio support:
+
+- check 50Hz noise --> might need to supply extra grounding for Pi
+- install ALSA plugins ("apt install libasound2-plugins") to have sample rate conversion support available
+  - USB sound cards sometimes support 48kHz and 44.1kHz only, we need 16kHz
+- tweak container's /etc/asound.conf
+
+pcm.ac108 {
+    type plug
+    slave.pcm "plughw:1,0" <--- depending on which index your card appears at
+}
