@@ -102,7 +102,10 @@ else
 		;;
 	_SNOOZE_*)
 		echo "Waiting for wakeup key!"
+		mplayer -ao $AUDIOOUTPUTDEVICE haj_wsak.mp3
+		python3 ./ring_status.py SLEEP
 		python3 ./snooze.py
+		mplayer -ao $AUDIOOUTPUTDEVICE slysu.mp3
 		;;
 	*)
 		echo "$1 is unknown!"
