@@ -13,7 +13,7 @@ import sys
 
 # keys on EXP500 are at 5 6 13 19
 # 5 and 19 are dangerous when the RESPEAKER is connected, only 6 and 13 can be used
-# reserve 13 for shutdown and use 6 for recording
+# reserve 13 for shutdown and use 6 for the application (start/stop listening or similar)
 KEY = [6]
 
 # LEDs on EXP500 are at 26 12 16 20
