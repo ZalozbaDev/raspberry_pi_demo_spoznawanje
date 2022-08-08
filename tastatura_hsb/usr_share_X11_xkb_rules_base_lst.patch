@@ -1,0 +1,10 @@
+--- /usr/share/X11/xkb/rules/base.lst.orig    2022-08-08 10:30:42.409181427 +0200
++++ /usr/share/X11/xkb/rules/base.lst    2022-08-08 10:31:13.277194905 +0200
+@@ -488,6 +488,7 @@
+   mac             de: German (Macintosh)
+   mac_nodeadkeys  de: German (Macintosh, no dead keys)
+   dsb             de: Lower Sorbian
++  hsb             de: Upper Sorbian
+   dsb_qwertz      de: Lower Sorbian (QWERTZ)
+   qwerty          de: German (QWERTY)
+   tr              de: Turkish (Germany)
