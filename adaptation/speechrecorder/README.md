@@ -1,7 +1,7 @@
 # Speechrecorder za Raspberry Pi
 
 Bohužel so program "BAS Speechrecorder" njemóže jednorje na Raspberry Pi wuwjesć.
-Z pomocy technologiji "docker" spytamy so tutoho problema wuhibać.
+Z pomocu technologije "docker" spytamy so tutomu problemej wuhibać.
 
 Sćěhowace kročele su trěbne:
 
@@ -11,19 +11,19 @@ Sćěhowace kročele su trěbne:
 docker build -t bas_speechrecorder_pi .
 ```
 
-* Awtentifikaciju za wuwjedźenje grafiskeho programa we containeru namakać:
+* Awtentifikaciju za wuwjedźenje grafiskeho programa w containeru namakać:
 
 ```console
 xauth list
 ```
 
-Jeli namakajće wjacore zapiski, wuzwolće tón, kiž ma "/unix" we mjenu. Přikład:
+Jeli namakaće wjacore zapiski, wuzwolće tón, kiž ma "/unix" w mjenu. Přikład:
 
 ```console
 raspbery-pi/unix:51  MIT-MAGIC-COOKIE-1  XYZABCatdatdatd
 ```
 
-* Wuwjesće program we containeru tak (zasadźiće wašu awtentifikaciju):
+* Wuwjedźće program w containeru takle (zasadźće wašu awtentifikaciju):
 
 ```console
 docker run --privileged -it --net=host -e DISPLAY -v /tmp/.X11-unix \
