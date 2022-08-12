@@ -18,3 +18,6 @@ while True:
             os.system("shutdown now -h")
      time.sleep(1) # 1s wait is ok, user might have to press for up to 5s
 
+# add this to "/etc/rc.local":
+# sudo python3 /home/pi/safePiShutdown.py &
+
