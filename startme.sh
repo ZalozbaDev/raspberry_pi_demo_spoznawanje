@@ -9,3 +9,4 @@ echo "vad.type   = $VOICE_ACTIVITY_DETECTION_ALGO" >> recognizer.cfg
 
 # sound card now defined in config (by name)
 ./recognizer -cfg recognizer.cfg -out vad | grep -v pF
+# while /bin/true ; do sleep 1  ; done
