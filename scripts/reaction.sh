@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # check this before building container, USB output is dynamic
-AUDIOOUTPUTDEVICE="alsa:device=hw=2.0"
+AUDIOOUTPUTDEVICE="alsa:device=hw=U0x19080x332a"
 
 # adjust to the IP assigned to delock-XXXX (check fritz.box web UI)
 LIGHT_SOCKET_IP=192.168.188.35
