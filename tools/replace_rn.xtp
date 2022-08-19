@@ -1,0 +1,69 @@
+#!/usr/bin/env dlabpro
+
+function -unify_is(a,b)
+{
+  data idx;
+  data is;
+  b.is a.is 0 0 idx /noerror -gen_index;
+  :idx.<0: b.is -dmark;
+  b.is 0 0 is /mark -select;
+  a.is is -cat;
+
+  a.is is 0 0 idx -gen_index;
+  :a.td["~TIS"]: 0 idx 0 1 idx -lookup { -1 };
+  idx 0 1 "~TIS" a.td -xstore;
+  is a.is =;
+
+  b.is is 0 0 idx -gen_index;
+  :b.td["~TIS"]: 0 idx 0 1 idx -lookup { -1 };
+  idx 0 1 "~TIS" b.td -xstore;
+  is b.is =;
+}
+
+function -unify_os(a,b)
+{
+  data idx;
+  data os;
+  b.os a.os 0 0 idx /noerror -gen_index;
+  :idx.<0: b.os -dmark;
+  b.os 0 0 os /mark -select;
+  a.os os -cat;
+
+  a.os os 0 0 idx -gen_index;
+  :a.td["~TOS"]: 0 idx 0 1 idx -lookup { -1 };
+  idx 0 1 "~TOS" a.td -xstore;
+  os a.os =;
+
+  b.os os 0 0 idx -gen_index;
+  :b.td["~TOS"]: 0 idx 0 1 idx -lookup { -1 };
+  idx 0 1 "~TOS" b.td -xstore;
+  os b.os =;
+}
+
+function -copy_last_ui(src,dst)
+{
+  data idx;
+  -type long 1 :dst.ud.nrec-1: idx -array;
+  "" 0 idx -rindex;
+
+  dst idx 0 dst -copy_ui;
+  src NULL 0 src -copy_ui;
+
+  src dst -cat;
+}
+
+object si;   "$1" si   -restore;
+object sirn; "$2" sirn -restore;
+
+sirn.itLX si.itLX -cat;
+sirn.itLM si.itLM -unify_is;
+sirn.itLM si.itLM -unify_os;
+sirn.itRN si.itRN -unify_os;
+sirn.itLM si.itLM -copy_last_ui;
+sirn.itRN si.itRN -copy_last_ui;
+si.itRN.os si.idLMtos =;
+
+"$1" si /zip -save;
+
+quit;
+

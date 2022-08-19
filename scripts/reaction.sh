@@ -68,25 +68,24 @@ else
 		echo "Speak sorbian!"
 		mplayer -ao $AUDIOOUTPUTDEVICE $(shuf -n1 -e rec_serbsce.mp3)
 		;;
-	_BRIGHTNESS_*_005_*)
+	_BRIGHTNESS_*)
 		echo "Brightness command: $1"
-		hue -c /dLabPro/bin.release/.hue.json lights 1 =10 
-		;;
-	_BRIGHTNESS_*_010_*)
-		echo "Brightness command: $1"
-		hue -c /dLabPro/bin.release/.hue.json lights 1 =20 
-		;;
-	_BRIGHTNESS_*_050_*)
-		echo "Brightness command: $1"
-		hue -c /dLabPro/bin.release/.hue.json lights 1 =100 
-		;;
-	_BRIGHTNESS_*_080_*)
-		echo "Brightness command: $1"
-		hue -c /dLabPro/bin.release/.hue.json lights 1 =160 
-		;;
-	_BRIGHTNESS_*_100_*)
-		echo "Brightness command: $1"
-		hue -c /dLabPro/bin.release/.hue.json lights 1 =200 
+		if (echo $1 | grep -q "<NUM>"); then
+			PERCENT=$(echo $1 | sed -r 's/.*<NUM>(.*)<\/NUM>.*/\1/')
+		else
+			PERCENT=NONE
+		fi
+		echo "Percent=$PERCENT"
+		if [ "$PERCENT" != "NONE" ]; then
+			PERCENTVALUE=$(echo "$(($PERCENT))")"%"
+		else
+			PERCENTVALUE="no_value"
+		fi
+	
+		echo "Value=${PERCENTVALUE}"
+		
+		# multiply by 2 and specify after "="
+		# hue -c /dLabPro/bin.release/.hue.json lights 1 =10 
 		;;
 	_SETCOLOR_*_RED_*)
 		echo "Setcolor command: $1"

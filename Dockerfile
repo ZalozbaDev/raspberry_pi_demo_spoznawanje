@@ -98,8 +98,25 @@ ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en     
 
 #######################################################
-# Process text corpus to generate phonetical lexicon
+# Process text corpora to generate phonetical lexicon
 #######################################################
+
+RUN apt install -y python3 python3-numpy python3-matplotlib python3-yaml
+
+# process the wakeup corpus
+# yes this is completely overkill for just one wakeup word
+
+RUN mkdir -p wakeup/
+
+COPY inputs/corpus/wakeup.corp              /wakeup/
+COPY inputs/phoneme_rules/exceptions_v3.txt /wakeup/
+COPY inputs/phoneme_rules/phonmap_v3.txt    /wakeup/
+COPY tools/BASgenerator.py                  /wakeup/
+COPY inputs/cfg/wakeup.yaml                 /wakeup/
+
+RUN cd wakeup && python3 BASgenerator.py wakeup.yaml || /bin/true
+
+# process the active corpus
 
 RUN mkdir -p corpus/
 
@@ -110,18 +127,16 @@ COPY tools/BASgenerator.py                  /corpus/
 COPY inputs/cfg/smartlamp.yaml              /corpus/
 
 ### 
-# as long as word classes are not supported, use the reduced grammar
+# combine base corpus with word classes corpus
 ###
-COPY inputs/corpus/no_word_classes_corpus.corp /corpus/
-RUN cat /corpus/smartlamp_base.corp /corpus/no_word_classes_corpus.corp > /corpus/smartlamp.corp
-
-RUN apt install -y python3 python3-numpy python3-matplotlib python3-yaml
+COPY inputs/corpus/word_class_corpus.corp /corpus/
+RUN cat /corpus/smartlamp_base.corp /corpus/word_class_corpus.corp > /corpus/smartlamp.corp
 
 RUN cd corpus && python3 BASgenerator.py smartlamp.yaml || /bin/true
 
-########################################
-# Run grammar merging with word classes
-########################################
+##################################################
+# Run merging of active grammar with word classes
+##################################################
 
 RUN git clone https://github.com/ZalozbaDev/UASR.git UASR
 RUN cd UASR && git checkout 2452801de688d0843edd718e5cd1a9c41c8fc90c
@@ -146,28 +161,24 @@ COPY inputs/uasr_grammar/digidom.txt                            /merge
 # combine all into one file
 RUN cat /merge/smartlamp_sampa_uasr.ulex /merge/manual_uasr_lexicon.txt /merge/digidom.txt > /merge/combined_uasr_grammar.txt
 
-#################
-# disabled as long as word classes are not supported with dialogue grammars
-#################
-
 #  copy word class files
-#COPY inputs/word_classes/*         /merge/
+COPY inputs/word_classes/*         /merge/
 
 #  add tooling
-#COPY tools/grm2ofst.xtp merge/
-#COPY tools/grmmerge.py  merge/
+COPY tools/grm2ofst.xtp merge/
+COPY tools/grmmerge.py  merge/
 
 #  script will work correctly only when all grammars are in same directory
 #  script expects path for the grammar (even if just "./") to work correctly
-#RUN cd merge/ && DLABPRO_HOME=/dLabPro/ UASR_HOME=/UASR/ python3 grmmerge.py ./combined_uasr_grammar.txt
+RUN cd merge/ && DLABPRO_HOME=/dLabPro/ UASR_HOME=/UASR/ python3 grmmerge.py ./combined_uasr_grammar.txt
 
 ################################################################
-# Package grammar, lexicon and acoustic model for recognition 
+# prepare packaging of grammars for recognition 
 ################################################################
 
-# copy config file
+# copy common config file
 RUN mkdir -p /uasr-data/db-hsb-asr-exp/common/info/
-COPY inputs/cfg/package.cfg   /uasr-data/db-hsb-asr-exp/common/info/
+COPY inputs/cfg/package_base.cfg   /uasr-data/db-hsb-asr-exp/common/info/
 
 # copy pretrained acoustic model
 RUN mkdir -p /no_adaptation/
@@ -188,21 +199,57 @@ RUN if [ "$USE_ADAPTED_MODELS" != "true" ] ; then echo "Basic model!"   ; cp /no
 RUN if [ "$USE_ADAPTED_MODELS"  = "true" ] ; then echo "Adapted model!" ; cp /adaptation/model/feainfo.object /uasr-data/db-hsb-asr-exp/common/model/ ; fi
 RUN if [ "$USE_ADAPTED_MODELS" != "true" ] ; then echo "Basic model!"   ; cp /no_adaptation/feainfo.object    /uasr-data/db-hsb-asr-exp/common/model/ ; fi
 
-#################
-# disabled as long as word classes are not supported with dialogue grammars
-#################
+# copy classes.txt (must be the same for both non-adapted / adapted models, and also the same that is generated from the active corpus BTW)
+RUN cd speech_recognition_pretrained_models && cp 2022_02_21/classes.txt /uasr-data/db-hsb-asr-exp/common/model/
 
-# copy openFST langauge model
 RUN mkdir -p /uasr-data/db-hsb-asr-exp/common/grm/
-#RUN cp /merge/combined_uasr_grammar.txt_ofst.txt   /uasr-data/db-hsb-asr-exp/common/grm/
-#RUN cp /merge/combined_uasr_grammar.txt_lex.txt    /uasr-data/db-hsb-asr-exp/common/grm/
+
+################################################################
+# Package wakeup word dialogue grammar for recognition 
+################################################################
+
+# dialog-specific config part
+COPY inputs/cfg/wakeup_word.cfg    /uasr-data/db-hsb-asr-exp/common/info/
+
+# fetch corresponding grammar
+COPY inputs/uasr_grammar/wakeup_word.txt /wakeup/
+
+# add generated lexicon
+RUN cat wakeup/uasr_configurations/lexicon/wakeup_sampa.ulex | sed -e 's/^/LEX: /' > wakeup/wakeup_lexicon.txt
+RUN cat wakeup/wakeup_lexicon.txt wakeup/wakeup_word.txt > /uasr-data/db-hsb-asr-exp/common/grm/wakeup_word.txt
+
+RUN UASR_HOME=uasr /dLabPro/bin.release/dlabpro /UASR/scripts/dlabpro/tools/REC_PACKDATA.xtp dlg /uasr-data/db-hsb-asr-exp/common/info/wakeup_word.cfg
+
+###################################################################
+# Package merged active grammar with word classes for recognition 
+###################################################################
+
+# active grammar specific config
+COPY inputs/cfg/digidom.cfg   /uasr-data/db-hsb-asr-exp/common/info/
+
+# copy openFST language model
+RUN cp /merge/combined_uasr_grammar.txt_ofst.txt   /uasr-data/db-hsb-asr-exp/common/grm/
+RUN cp /merge/combined_uasr_grammar.txt_lex.txt    /uasr-data/db-hsb-asr-exp/common/grm/
 # don't forget to copy the input and output symbol files!!! Packaging will not warn you if these are not found!
-#RUN cp /merge/combined_uasr_grammar.txt_ofst_is.txt   /uasr-data/db-hsb-asr-exp/common/grm/
-#RUN cp /merge/combined_uasr_grammar.txt_ofst_os.txt   /uasr-data/db-hsb-asr-exp/common/grm/
+RUN cp /merge/combined_uasr_grammar.txt_ofst_is.txt   /uasr-data/db-hsb-asr-exp/common/grm/
+RUN cp /merge/combined_uasr_grammar.txt_ofst_os.txt   /uasr-data/db-hsb-asr-exp/common/grm/
 
-RUN cp /merge/combined_uasr_grammar.txt /uasr-data/db-hsb-asr-exp/common/grm/
+RUN UASR_HOME=uasr /dLabPro/bin.release/dlabpro /UASR/scripts/dlabpro/tools/REC_PACKDATA.xtp rec /uasr-data/db-hsb-asr-exp/common/info/digidom.cfg
 
-RUN UASR_HOME=uasr /dLabPro/bin.release/dlabpro /UASR/scripts/dlabpro/tools/REC_PACKDATA.xtp dlg /uasr-data/db-hsb-asr-exp/common/info/package.cfg
+##############################################
+# Combine the two packaged grammars into one
+##############################################
+
+RUN mkdir /recognizer
+
+# copy all output files for wakeup word dialogue grammar
+RUN cp /grm_wakeup_word/* /recognizer
+
+# add script for merging of packaged grammars
+COPY tools/replace_rn.xtp /recognizer
+
+# merge the active grammar (second argument) into the dialogue grammar (first argument)
+RUN cd recognizer && /dLabPro/bin.release/dlabpro replace_rn.xtp sesinfo.object ../grm_active/sesinfo.object
 
 ######################################
 # Respeaker USB stuff

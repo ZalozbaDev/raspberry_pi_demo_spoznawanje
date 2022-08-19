@@ -5,7 +5,7 @@ services:
      restart: always
      privileged: true
      environment:
-       PORTAUDIO_SOUND_CARD_NAME: "ac108"
+       PORTAUDIO_SOUND_CARD_NAME: "default"
        VOICE_ACTIVITY_DETECTION_ALGO: "rtc"
        REJECTION_TAD: "0.1"
        REJECTION_TED: "0.8"
