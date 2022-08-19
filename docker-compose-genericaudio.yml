@@ -7,6 +7,7 @@ services:
      environment:
        PORTAUDIO_SOUND_CARD_NAME: "default"
        VOICE_ACTIVITY_DETECTION_ALGO: "rtc"
+       VOICE_ACTIVITY_DETECTION_AGGRESSIVENESS: "0"
        REJECTION_TAD: "0.1"
        REJECTION_TED: "0.8"
        
