@@ -6,6 +6,9 @@ AUDIOOUTPUTDEVICE="alsa:device=hw=U0x19080x332a"
 # adjust to the IP assigned to delock-XXXX (check fritz.box web UI)
 LIGHT_SOCKET_IP=192.168.188.35
 
+# specifying DNS is also possible
+# LIGHT_SOCKET_IP=delock-0393.fritz.box
+
 # for HUE, find out the IP like described here: https://huetips.com/help/how-to-find-my-bridge-ip-address/ 
 # https://discovery.meethue.com/
 # and adjust ".hue.json" appropriately
