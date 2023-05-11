@@ -291,24 +291,35 @@ function spellNum() {
 }
 
 function spellTime() {
-  let hlos = 1;
-  let hlosEl = document.getElementById("hlos");
-  if (hlosEl != null) hlos = hlosEl.value;
+  let hlos = 2;
+  
+  // do not read voice fields
+  
+  // let hlosEl = document.getElementById("hlos");
+  // if (hlosEl != null) hlos = hlosEl.value;
 
-  let spellTextArea = document.getElementById("spelltextarea");
+  // let spellTextArea = document.getElementById("spelltextarea");
 
-  let full_hour = document.getElementById("full_hour").checked;
+  // let full_hour = document.getElementById("full_hour").checked;
+  
+  let spellTextArea = "";
+  let full_hour = false;
+  
   let currentTime = true;
   let zeit = new Date();
   let hours = zeit.getHours();
   let min = zeit.getMinutes();
-  let casText = document.getElementById("timefield").value;
-  if (casText !== null && casText != "") {
-    let casA = casText.split(":");
-    hours = parseInt(casA[0]);
-    min = parseInt(casA[1]);
-    currentTime = false;
-  }
+  
+  // do not read time fields
+  
+  // let casText = document.getElementById("timefield").value;
+  // if (casText !== null && casText != "") {
+  //  let casA = casText.split(":");
+  //  hours = parseInt(casA[0]);
+  //  min = parseInt(casA[1]);
+  //  currentTime = false;
+  // }
+  
   if (currentTime && full_hour) {
     min = 0;
   }
@@ -337,8 +348,21 @@ function getaudio(key, type, hlos) {
   let path = audiopath + hlos + "/" + type + "/" + key;
   if (hlos == 1) path += ".ogg";
   else path += ".mp3";
-  console.log("getaudio:" + path);
-  return new Audio(path);
+
+  // download&cache files
+  
+  const execSync = require('child_process').execSync;
+  
+  const output1 = execSync('mkdir -p ' + audiopath + hlos + '/' + type + '/', { encoding: 'utf-8' });  // the default is 'buffer'
+  console.log('--- Output was:\n', output1);
+
+  const output2 = execSync('if [ ! -e ' + path + ' ]; then wget https://gaussia.de/slp/' + path + ' -O ' + path + '; fi', { encoding: 'utf-8' });  // the default is 'buffer'
+  console.log('--- Output was:\n', output2);
+  
+  // console.log("getaudio:" + path);
+  // return new Audio(path);
+  
+  return path;
 }
 
 function playAudioA(audio, hlos, spellEl) {
@@ -385,25 +409,38 @@ function playAudioA(audio, hlos, spellEl) {
       }
     }
   }
-  spellEl.innerHTML = "";
-  const addToOutput = function (text) {
-    console.log("addToOutput: " + text);
-    let curtext = spellEl.innerHTML;
-    if (!curtext.endsWith(connectWordsMarker)) curtext += " ";
-    else curtext = curtext.replaceAll(connectWordsMarker, "");
-    curtext += text;
-    spellEl.innerHTML = curtext;
-  };
+  // spellEl.innerHTML = "";
+  //const addToOutput = function (text) {
+  //  console.log("addToOutput: " + text);
+  //  let curtext = spellEl.innerHTML;
+  //  if (!curtext.endsWith(connectWordsMarker)) curtext += " ";
+  //  else curtext = curtext.replaceAll(connectWordsMarker, "");
+  //  curtext += text;
+  //  spellEl.innerHTML = curtext;
+  //};
   let curaudio = null;
   for (let i = 0; i < audioA.length; ++i) {
     curaudio = audioA[i];
-    curaudio.onended = function () {
-      if (i < audioA.length - 1) {
-        addToOutput(audioTexts[i + 1]);
-        audioA[i + 1].play();
-      }
-    };
+    
+    // play downloaded files
+    const execSync = require('child_process').execSync;
+
+    console.log('Playing ' + audioA[i]);
+    const output = execSync('mplayer -ao alsa:device=hw=U0x19080x332a ' + audioA[i], { encoding: 'utf-8' });  // the default is 'buffer'
+    console.log('--- Output was:\n', output);
+   
+    
+    //curaudio.onended = function () {
+    //  if (i < audioA.length - 1) {
+    //    addToOutput(audioTexts[i + 1]);
+    //    audioA[i + 1].play();
+    //  }
+    //};
   }
-  addToOutput(audioTexts[0]);
-  audioA[0].play();
+  //addToOutput(audioTexts[0]);
+  //audioA[0].play();
 }
+
+// as standalone script, it needs a function call
+spellTime();
+
