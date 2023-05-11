@@ -4,6 +4,8 @@ services:
      image: digidom_spoznawanje:latest
      restart: always
      privileged: true
+     volumes:
+       - ./scripts/:/scripts
      environment:
        PORTAUDIO_SOUND_CARD_NAME: "ReSpeaker 4 Mic Array (UAC1.0)"
        VOICE_ACTIVITY_DETECTION_ALGO: "usb"

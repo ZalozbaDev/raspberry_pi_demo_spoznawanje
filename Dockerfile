@@ -267,9 +267,12 @@ RUN cd pixel_ring && python3 setup.py install
 # Add scripts for running and reactions
 ###################################
 
-COPY scripts/* /dLabPro/bin.release/
+COPY config/* /dLabPro/bin.release/
 
 COPY startme.sh /
+
+# prepare folder for bind-mount of scripts
+RUN mkdir /scripts/
 
 CMD ["/bin/bash", "-c", "/startme.sh"] 
 

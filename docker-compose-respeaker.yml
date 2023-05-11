@@ -4,6 +4,8 @@ services:
      image: digidom_spoznawanje:latest
      restart: always
      privileged: true
+     volumes:
+       - ./scripts/:/scripts
      environment:
        PORTAUDIO_SOUND_CARD_NAME: "ac108"
        VOICE_ACTIVITY_DETECTION_ALGO: "rtc"

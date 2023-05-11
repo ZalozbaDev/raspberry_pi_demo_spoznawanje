@@ -7,9 +7,11 @@ import os
 import subprocess
 import re
 
+import sys
+
+sys.path.append('/dLabPro/bin.release/')
 import apa102
 
-import sys
 
 # keys on EXP500 are at 5 6 13 19
 # 5 and 19 are dangerous when the RESPEAKER is connected, only 6 and 13 can be used
