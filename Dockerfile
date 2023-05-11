@@ -282,7 +282,11 @@ CMD ["/bin/bash", "-c", "/startme.sh"]
 
 
 # run demo manually:
-## docker run --privileged -it digidom_spoznawanje /bin/bash
-## python3 /pixel_ring/examples/usb_mic_array_custom.py
+## docker run -e PORTAUDIO_SOUND_CARD_NAME=ac108 -e VOICE_ACTIVITY_DETECTION_ALGO=rtc -e VOICE_ACTIVITY_DETECTION_AGGRESSIVENESS=0 -e REJECTION_TAD=0.1 -e REJECTION_TED=0.8 --mount type=bind,source="$(pwd)"/scripts,target=/scripts/ --privileged -it digidom_spoznawanje /bin/bash
+## /startme.sh 
+## CTRL+C
 ## cd dLabPro/bin.release/
 ## ./recognizer -cfg recognizer.cfg -out vad -d 4 | grep -v pF
+
+
+## python3 /pixel_ring/examples/usb_mic_array_custom.py
