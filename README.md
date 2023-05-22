@@ -14,6 +14,13 @@ Prošu změńće jumpery na EXP500 kaž na tutym wobrazu:
 
 # Software
 
+KEDŹBU! 64 bit hišće njefunguje, prošu zapisajće
+
+* arm_64bit=0
+
+do wašu "/boot/config.txt" a startujeće system znowa!
+
+
 Sćěhowaca software dyrbi so instalować:
 
 * docker
