@@ -48,23 +48,6 @@ docker-compose -f docker-compose-respeaker.yml up -d
 docker-compose -f docker-compose-usb-respeaker.yml up -d
 ```
 
-# Akustiska adapcija
-
-Adapcija na rěčnika a wužiwany mikrofon zlěpši wukon tutoho prototypa.
-Drobnosće k technologiji adapcije su tule wopisane: https://github.com/ZalozbaDev/speech_recognition_acoustic_model_training/tree/main/step4_speaker_adaptation
-
-Za wopisanje hromadźenja trěbnych nahrawanjow a přewjedźenje adapcije hladajće prošu do rjadowaka "adaptation".
-
-Ručež předleži adaptowany model, móže so do containera zatwarić.
-
-Container wužiwajo adaptowany model twariće sej takle (hlej tež započatk dataje "Dockerfile"):
-
-```console
-docker build --build-arg USE_ADAPTED_MODELS=true -t digidom_spoznawanje .
-```
-
-Po tym móže so container na samsne wašnje wužiwać.
-
 # Přiměrjenje
 
 Za přiměrjenje funkcijow, abo zatwar nowych funkcijow su změny we tutych datajach trěbne: 
