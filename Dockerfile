@@ -186,7 +186,9 @@ RUN cd speech_recognition_pretrained_models && cp 2022_02_21/3_7.hmm 2022_02_21/
 
 # copy directory which might contain adapted models
 RUN mkdir /adaptation/
-COPY adaptation/output/ /adaptation/
+
+# TODO re-enable once re-adding adaptation
+# COPY adaptation/output/ /adaptation/
 
 # select which model to use
 RUN mkdir -p /uasr-data/db-hsb-asr-exp/common/model/
