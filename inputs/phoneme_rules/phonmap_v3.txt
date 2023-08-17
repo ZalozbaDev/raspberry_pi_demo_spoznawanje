@@ -21,8 +21,10 @@ O	O	V
 Ó	U	V
 P	p	C
 R	r	C
+Ŕ	r	C
 Ř	S	C
 S	s	C
+Ś	S	C
 Š	S	C
 T	t	C
 U	u	V

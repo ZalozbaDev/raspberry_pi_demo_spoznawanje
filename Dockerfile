@@ -2,13 +2,13 @@ FROM debian:bullseye-slim
 MAINTAINER Daniel Sobe <daniel.sobe@sorben.com>
 
 # normal call using builtin acoustic models
-# docker build -t digidom_spoznawanje .
+# docker build -t digidom_spoznawanje_dsb .
 
 # normal call but specify adapted acoustic models
-# docker build --build-arg USE_ADAPTED_MODELS=true -t digidom_spoznawanje .
+# docker build --build-arg USE_ADAPTED_MODELS=true -t digidom_spoznawanje_dsb .
 
 # rebuild from scratch
-# docker build -t digidom_spoznawanje . --no-cache
+# docker build -t digidom_spoznawanje_dsb . --no-cache
 
 RUN apt update
 
@@ -280,11 +280,11 @@ CMD ["/bin/bash", "-c", "/startme.sh"]
 
 # fetch SVGs of resulting grammar and all other data for recognition
 ## mkdir -p output 
-## docker run --mount type=bind,source="$(pwd)"/output,target=/output/ -it digidom_spoznawanje cp -r /recognizer /output/ 
+## docker run --mount type=bind,source="$(pwd)"/output,target=/output/ -it digidom_spoznawanje_dsb cp -r /recognizer /output/ 
 
 
 # run demo manually:
-## docker run -e PORTAUDIO_SOUND_CARD_NAME=ac108 -e VOICE_ACTIVITY_DETECTION_ALGO=rtc -e VOICE_ACTIVITY_DETECTION_AGGRESSIVENESS=0 -e REJECTION_TAD=0.1 -e REJECTION_TED=0.8 --mount type=bind,source="$(pwd)"/scripts,target=/scripts/ --privileged -it digidom_spoznawanje /bin/bash
+## docker run -e PORTAUDIO_SOUND_CARD_NAME=ac108 -e VOICE_ACTIVITY_DETECTION_ALGO=rtc -e VOICE_ACTIVITY_DETECTION_AGGRESSIVENESS=0 -e REJECTION_TAD=0.1 -e REJECTION_TED=0.8 --mount type=bind,source="$(pwd)"/scripts,target=/scripts/ --privileged -it digidom_spoznawanje_dsb /bin/bash
 ## /startme.sh 
 ## CTRL+C
 ## cd dLabPro/bin.release/
