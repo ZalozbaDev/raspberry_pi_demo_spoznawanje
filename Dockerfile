@@ -121,7 +121,7 @@ RUN cd wakeup && python3 BASgenerator.py wakeup.yaml || /bin/true
 RUN mkdir -p corpus/
 
 # TODO go back to full corpus once DSB phonetics are in place!
-COPY inputs/corpus/smartlamp_base_reduced.corp      /corpus/
+COPY inputs/corpus/smartlamp_base_reduced.corp      /corpus/smartlamp_base.corp
 COPY inputs/phoneme_rules/exceptions_v3.txt /corpus/
 COPY inputs/phoneme_rules/phonmap_v3.txt    /corpus/
 COPY tools/BASgenerator.py                  /corpus/
