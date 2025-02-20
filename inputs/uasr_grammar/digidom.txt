@@ -1,15 +1,15 @@
 
 # Sleep recognition
-GRM:	S GÓTOWY:__SLEEP__
-GRM:	S ŹĚKUJU:__SLEEP__
+GRM:	S GETOWY:__SLEEP__
+GRM:	S ŽĚKUJU:__SLEEP__
 
 # Main entry
 GRM: (S) <PAU> (S)
 GRM: (F) <PAU> (F)
 
 # wait for keypress
-GRM: (S) :_SNOOZE_ BUŹ:BUŹ ZMĚROM:ZMĚROM (F)
-GRM: (S) :_SNOOZE_ BUŹ:BUŹ SĆICHA:SĆICHA (F)
+GRM: (S) :_SNOOZE_ BUŽ:BUŽ ZMĚROM:ZMĚROM (F)
+GRM: (S) :_SNOOZE_ BUŽ:BUŽ SĆICHA:SĆICHA (F)
 
 # tell joke
 GRM: (S) :_JOKE_ POWĚDAJ:POWĚDAJ MĚ:MĚ PŠOSYM:PŠOSYM ŽORT:ŽORT (F)
