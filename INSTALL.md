@@ -54,6 +54,21 @@ git checkout dolnoserbski
 docker build -t digidom_spoznawanje .
 ```
 
+- shutdown nastajić
+
+```code
+cd raspberry_pi_demo_spoznawanje/
+cp safePiShutdown.py /home/pi
+nano /etc/rc.local
+#  sudo python3 /home/pi/safePiShutdown.py &
+# add this to the last line
+```
+
+
+- container wuwjesć
+
+```code
 docker-compose -f docker-compose-respeaker.yml up -d
 docker-compose -f docker-compose-respeaker.yml logs -f
+```
 
