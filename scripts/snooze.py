@@ -9,7 +9,7 @@ import os
 # 5 and 19 are dangerous when the RESPEAKER is connected, only 6 and 13 can be used
 # reserve 13 for shutdown and use 6 for the application (start/stop listening or similar)
 
-wakeupButton = Button(6) # choose GPIO 6 from EXP500 == KEY1
+# wakeupButton = Button(6) # choose GPIO 6 from EXP500 == KEY1
 
 #leaveLoop = False
 
