@@ -11,14 +11,17 @@ import os
 
 wakeupButton = Button(6) # choose GPIO 6 from EXP500 == KEY1
 
-leaveLoop = False
+#leaveLoop = False
 
-while leaveLoop == False:
-     if wakeupButton.is_pressed:
-        time.sleep(1) # wait for 1 seconds to avoid accidental presses
-        if wakeupButton.is_pressed:
-            print("WAKING UP AGAIN!!!")
-            leaveLoop = True
-     print("ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ")
-     time.sleep(1) # 1s wait is ok
+#while leaveLoop == False:
+#     if wakeupButton.is_pressed:
+#        time.sleep(1) # wait for 1 seconds to avoid accidental presses
+#        if wakeupButton.is_pressed:
+#            print("WAKING UP AGAIN!!!")
+#            leaveLoop = True
+#     print("ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ")
+#     time.sleep(1) # 1s wait is ok
+
+# hack because reading GPIO from python is currently broken
+time.sleep(20)
 
