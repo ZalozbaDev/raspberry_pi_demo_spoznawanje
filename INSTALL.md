@@ -20,18 +20,10 @@
 
 ```code
 sudo apt update
-sudo apt install docker.io git
+sudo apt install docker.io git docker-compose
 sudo systemctl enable docker
 sudo adduser pi docker
 sudo reboot
-```
-
-- žórła wobstarać
-
-```code
-git clone https://github.com/ZalozbaDev/raspberry_pi_demo_spoznawanje.git
-cd raspberry_pi_demo_spoznawanje/
-git checkout dolnoserbski
 ```
 
 - install seeed microphone driver
@@ -53,9 +45,15 @@ sudo raspi-config
 # Interace Options --> SPI --> yes
 ```
 
-- container twarić
+- žórła wobstarać a container twarić
 
 ```code
+git clone https://github.com/ZalozbaDev/raspberry_pi_demo_spoznawanje.git
+cd raspberry_pi_demo_spoznawanje/
+git checkout dolnoserbski
 docker build -t digidom_spoznawanje .
 ```
+
+docker-compose -f docker-compose-respeaker.yml up -d
+docker-compose -f docker-compose-respeaker.yml logs -f
 
