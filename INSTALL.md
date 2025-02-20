@@ -34,6 +34,25 @@ cd raspberry_pi_demo_spoznawanje/
 git checkout dolnoserbski
 ```
 
+- install seeed microphone driver
+
+```code
+git clone https://github.com/ZalozbaDev/seeed-voicecard.git
+cd seeed-voicecard
+git checkout v6.6
+sudo ./install.sh
+sudo reboot
+# test driver 
+arecord -L
+```
+
+- LEDs nastajić
+
+```code
+sudo raspi-config
+# Interace Options --> SPI --> yes
+```
+
 - container twarić
 
 ```code
