@@ -41,7 +41,7 @@ RUN cd usb_4_mic_array/cpp/ && chmod 755 build_static.sh && ./build_static.sh
 ###################################
 
 RUN git clone https://github.com/ZalozbaDev/dLabPro.git dLabPro
-RUN cd dLabPro && git checkout 60152578ddf2d61263b5540d7a67bffc3e62740f
+RUN cd dLabPro && git checkout 2486b8170f6b4149922ad0f25e037f6a1454aa1d
 
 RUN apt install -y libreadline-dev portaudio19-dev
 
