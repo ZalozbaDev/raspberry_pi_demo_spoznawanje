@@ -1,0 +1,10 @@
+0 1 <eps> <WDAY>
+1 2 weekdays <eps>
+2 3 <eps> </WDAY>
+3
+0 4 <eps> <DATE>
+3 4 <eps> <DATE>
+4 5 DateDat <eps>
+4 5 DateNom <eps>
+5 6 <eps> </DATE>
+6
