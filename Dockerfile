@@ -1,4 +1,4 @@
-FROM debian:bullseye-slim
+FROM debian:bookworm-slim
 MAINTAINER Daniel Sobe <daniel.sobe@sorben.com>
 
 # normal call using builtin acoustic models
@@ -41,7 +41,7 @@ RUN cd usb_4_mic_array/cpp/ && chmod 755 build_static.sh && ./build_static.sh
 ###################################
 
 RUN git clone https://github.com/ZalozbaDev/dLabPro.git dLabPro
-RUN cd dLabPro && git checkout 60152578ddf2d61263b5540d7a67bffc3e62740f
+RUN cd dLabPro && git checkout 2486b8170f6b4149922ad0f25e037f6a1454aa1d
 
 RUN apt install -y libreadline-dev portaudio19-dev
 
@@ -67,7 +67,8 @@ RUN cp /seeed-voicecard/ac108_asound.state /var/lib/alsa/asound.state
 RUN apt install -y python3-gpiozero python3-rpi.gpio python3-pip
 
 # spidev not yet packaged for debian bullseye
-RUN pip3 install spidev 
+# RUN pip3 install spidev 
+RUN apt install -y python3-spidev
 
 RUN git clone https://github.com/ZalozbaDev/4mics_hat.git 4mics_hat
 RUN cd 4mics_hat && git checkout 1ab5011bef00b444b76ffe391491528b2148a50f 
@@ -120,7 +121,8 @@ RUN cd wakeup && python3 BASgenerator.py wakeup.yaml || /bin/true
 
 RUN mkdir -p corpus/
 
-COPY inputs/corpus/smartlamp_base.corp      /corpus/
+# TODO go back to full corpus once DSB phonetics are in place!
+COPY inputs/corpus/smartlamp_base_reduced.corp      /corpus/smartlamp_base.corp
 COPY inputs/phoneme_rules/exceptions_v3.txt /corpus/
 COPY inputs/phoneme_rules/phonmap_v3.txt    /corpus/
 COPY tools/BASgenerator.py                  /corpus/
@@ -258,7 +260,7 @@ RUN cd recognizer && /dLabPro/bin.release/dlabpro replace_rn.xtp sesinfo.object 
 ######################################
 
 # code to reconfigure the LEDs
-RUN apt install -y python-setuptools libusb-1.0-0 python3-libusb1
+RUN apt install -y python3-setuptools libusb-1.0-0 python3-libusb1
 
 RUN git clone https://github.com/ZalozbaDev/pixel_ring.git pixel_ring
 RUN cd pixel_ring && git checkout 1a93e279f92bca31a78e52f1aa5658015643a6f7
@@ -275,6 +277,11 @@ COPY startme.sh /
 
 # prepare folder for bind-mount of scripts
 RUN mkdir /scripts/
+
+RUN apt-key adv --fetch-keys http://archive.raspberrypi.com/debian/raspberrypi.gpg.key
+RUN echo "deb http://archive.raspberrypi.com/debian/ bookworm main" > /etc/apt/sources.list.d/raspi.list
+RUN apt update
+RUN apt install -y python3-lgpio
 
 CMD ["/bin/bash", "-c", "/startme.sh"] 
 

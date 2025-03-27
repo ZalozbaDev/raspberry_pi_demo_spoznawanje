@@ -33,7 +33,7 @@ else
 			;;
 		*)
 			echo "Reject reaction for active states"
-			mplayer -ao $AUDIOOUTPUTDEVICE $(shuf -n1 -e njejsym_rozumil.mp3 prosu_hisce_raz.mp3)
+			mplayer -ao $AUDIOOUTPUTDEVICE $(shuf -n1 -e to_njejsom_rozmel.mp3 psosym_hysci_raz.mp3)
 			;;
 	    esac
 		;;
@@ -104,10 +104,13 @@ else
 		;;
 	_SNOOZE_*)
 		echo "Waiting for wakeup key!"
-		mplayer -ao $AUDIOOUTPUTDEVICE haj_wsak.mp3
+		mplayer -ao $AUDIOOUTPUTDEVICE jo_wsak_jo.mp3
 		python3 ./ring_status.py SLEEP
 		python3 ./snooze.py
-		mplayer -ao $AUDIOOUTPUTDEVICE slysu.mp3
+		mplayer -ao $AUDIOOUTPUTDEVICE jo_slucham.mp3
+		;;
+	_JOKE_*)
+		mplayer -ao $AUDIOOUTPUTDEVICE zort_2.mp3
 		;;
 	*)
 		echo "$1 is unknown!"
