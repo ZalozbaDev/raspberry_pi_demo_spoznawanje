@@ -1,0 +1,6 @@
+0 1 jaden +1
+0 1 dwa +2
+0 1 tśi +3
+0 1 styri +4
+0 1 NUM5-99 <eps>
+1

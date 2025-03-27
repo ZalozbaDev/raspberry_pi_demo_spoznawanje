@@ -1,0 +1,9 @@
+0 1 <eps> -(
+1 2 jaden +1
+1 2 dwa +2
+1 2 tśi +3
+1 2 styri +4
+1 2 pěś +5
+1 2 krotko +2
+2 3 do )
+3

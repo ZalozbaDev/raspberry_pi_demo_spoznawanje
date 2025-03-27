@@ -1,0 +1,10 @@
+0 1 jaden +1
+0 1 dwa +2
+0 1 tśi +3
+0 1 styri +4
+0 1 pěś +5
+0 1 šesć +6
+0 1 sedym +7
+0 1 wósym +8
+0 1 źewjeś +9
+1

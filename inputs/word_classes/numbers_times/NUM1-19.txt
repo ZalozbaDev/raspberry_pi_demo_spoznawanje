@@ -1,0 +1,13 @@
+0 2 NUM1-9 <eps>
+0 2 źaseś +10
+0 1 jad +1
+0 1 dwa +2
+0 1 tśi +3
+0 1 styr +4
+0 1 pěś +5
+0 1 šes +6
+0 1 sedym +7
+0 1 wósym +8
+0 1 źewjeś +9
+1 2 nasćo +10
+2

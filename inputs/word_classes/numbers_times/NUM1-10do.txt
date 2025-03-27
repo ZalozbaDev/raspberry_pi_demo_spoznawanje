@@ -1,0 +1,9 @@
+0 3 NUM1-5do <eps>
+0 1 <eps> -(
+1 2 šesć +6
+1 2 sedym +7
+1 2 wósym +8
+1 2 źewjeś +9
+1 2 źaseś +10
+2 3 do )
+3
