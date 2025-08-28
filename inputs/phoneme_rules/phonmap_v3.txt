@@ -32,6 +32,7 @@ W	w	C
 Y	1	V
 Z	z	C
 Ž	Z	C
+Ź	Z	C
 CH	x	C
 DŹ	dZ	C
 V	f	C
